@@ -24,6 +24,15 @@ public class ProjetEssaim {
     public static void main(String[] args) {
     FileCnf fc = new FileCnf("/Users/q/Documents/SII/PROJET ESSAIM/uf20-91/uf20-024.cnf");
    fc.print();
+   Cnf fcc = fc.getFormatedCnf();
+   int[][] matrix= fcc.getMatrix();
+   int size=matrix.length;
+   for(int i=1;i<size;i++)
+   {
+    System.out.println(Arrays.toString(matrix[i]));
+   }
+    
+    
     }
     
 }

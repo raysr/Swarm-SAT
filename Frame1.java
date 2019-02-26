@@ -4,9 +4,6 @@
  * and open the template in the editor.
  */
 package projetessaim;
-import java.io.*; 
-
-import java.io.FileNotFoundException;
 import javax.swing.DefaultListModel;
 /**
  *
@@ -96,21 +93,8 @@ this.jList1.setModel(this.model);
     }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-                try
-    {
-         FileReader fr = new FileReader("/Users/q/Documents/SII/PROJET ESSAIM/uf20-91/uf20-024.cnf"); 
-  
-    int i; 
-    while ((i=fr.read()) != -1) 
-      System.out.print((char) i);  
-     
-
-    this.model.addElement((char) i);
-    }
-          catch (FileNotFoundException ex)  
-    {
-        System.out.println("File Not Found.");
-    }
+                 FileCnf fc = new FileCnf("/Users/q/Documents/SII/PROJET ESSAIM/uf20-91/uf20-024.cnf");
+                 
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**

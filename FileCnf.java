@@ -47,10 +47,15 @@ public class FileCnf {
         System.out.println("File Not Found.");
     }
     }
+    public Cnf getFormatedCnf()
+    {
+    return new Cnf(this.cnfs);
+    }
     
     public void print()
     {
                 System.out.println("Length : "+cnfs.size());
         System.out.println("Example : "+Arrays.toString(cnfs.get(3)));
     }
+    public ArrayList<String[]> getCnfs(){return this.cnfs;}
 }
