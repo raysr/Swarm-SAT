@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package projetessaim;
-import java.util.Arrays;
+import javax.swing.DefaultListModel;
 import java.util.Random;
 /**
  *
@@ -13,7 +13,7 @@ import java.util.Random;
 public class Sat {
    private int[] solution = new int[21]; 
 
-   public void RandomSolution()
+   public void RandomSolution(DefaultListModel mod1)
    {
        System.out.println("Generate random");
        int[] poss={0,1};
@@ -22,33 +22,9 @@ public class Sat {
    Random generator = new Random();
 int randomIndex = generator.nextInt(poss.length);
 this.solution[i]=poss[randomIndex];
+mod1.addElement("X"+i+" : "+poss[randomIndex]);
    }
    }
 public int[] getSolution(){return this.solution;}
-/*
-public boolean ValidateSolution(int[][] cnfs)
-{
-Integer[] sat = new Integer[91];
-int size = cnfs.length;
-for(int i=1;i<size;i++)
-{
-int size2=cnfs[i].length;
-int last=cnfs[i][size2-1];
-for(int j=0;j<last;j++)
-{
-sat[Math.abs(cnfs[i][j])]=((this.solution[i]>0 && cnfs[i][j]>0) || (this.solution[i]<0 && cnfs[i][j]<0))?1:0;
-}
-}
-boolean test=true;
-int i=0;
-while(test && i<91)
-{
-    if(sat[i]==0){test=false;}
-}
-System.out.println("Variable instance : "+Arrays.toString(this.solution));
-return test;
-}
-
-*/
 
 }

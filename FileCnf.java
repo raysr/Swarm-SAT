@@ -10,6 +10,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 
 /**
  *
@@ -33,7 +34,18 @@ public class FileCnf {
             {
                 String [] tmp = line.split("\\s+");
                 String[] splited = Arrays.copyOf(tmp, tmp.length-1);
-                cnfs.add(splited);
+                String[] now=new String[3];
+                int co=0;
+                for(int bim=0;bim<splited.length;bim++)
+                {
+                if(!splited[bim].equals(""))
+                {
+                now[co]=splited[bim];
+                co++;
+                }
+                }
+
+                this.cnfs.add(now);
             }
             }catch(Exception e){}
 	// read next line
@@ -48,7 +60,7 @@ public class FileCnf {
         System.out.println("File Not Found.");
     }
     }
-    public boolean TestCnfSolution(int[] solution)
+    public int TestCnfSolution(int[] solution)
     {
      int size=this.cnfs.size();
     int i=0;
@@ -62,28 +74,68 @@ public class FileCnf {
         int j=0;
         while(j<3 && !test)
         {
-            if(clause[j].equals("")==false)
-            {
+         
         int var=Integer.valueOf(clause[j]);
         int abs=Math.abs(var);
         if((var>0 && solution[abs]==1) || (var<0 && solution[abs]==0)){test=true;}
         line[j]=var;
       count++;
-            }
+            
            j++;
          }
         if(!test){bigger_test=false;}
         this.cnfs_format.add(line);
-        System.out.println("Line :"+i);
         i++;
     }
-    return bigger_test;
+
+    return i;
     }
     
-    public void print()
+    
+    
+    
+        public ArrayList<int[]> TestCnfSpecialSolution(int[] solution)
     {
-                System.out.println("Length : "+cnfs.size());
-        System.out.println("Example : "+Arrays.toString(cnfs.get(3)));
+     int size=this.cnfs.size();
+    int i=0;
+    int count=0;
+    boolean bigger_test=true;
+    while(i<size && bigger_test)
+    {
+        String[] clause=this.cnfs.get(i);
+        int[] line=new int[3];
+        boolean test=false;
+        int j=0;
+
+        while(j<3 && !test)
+        {
+            
+        int var=Integer.valueOf(clause[j]);
+        int abs=Math.abs(var);
+        if((var>0 && solution[abs]==1) || (var<0 && solution[abs]==0)){test=true;}
+        line[j]=var;
+    
+        
+      count++;
+         
+         
+           j++;
+         }
+        /*
+        String a=Integer.toString(line[0]);
+        String b=Integer.toString(line[1]);
+        String c=Integer.toString(line[2]);
+        tabmodel1.addRow(new Object[]{a, b, c});
+*/
+        if(!test){bigger_test=false;}
+        this.cnfs_format.add(line);
+        i++;
     }
-    public ArrayList<String[]> getCnfs(){return this.cnfs;}
+
+    return this.cnfs_format;
+    }
+        
+ 
+    
+    
 }
