@@ -17,6 +17,7 @@ import java.util.Arrays;
  */
 public class FileCnf {
     private ArrayList<String[]> cnfs= new ArrayList<String[]>();
+      private ArrayList<int[]> cnfs_format= new ArrayList<int[]>();
     public FileCnf(String path)
     {
         try
@@ -47,9 +48,36 @@ public class FileCnf {
         System.out.println("File Not Found.");
     }
     }
-    public Cnf getFormatedCnf()
+    public boolean TestCnfSolution(int[] solution)
     {
-    return new Cnf(this.cnfs);
+     int size=this.cnfs.size();
+    int i=0;
+    int count=0;
+    boolean bigger_test=true;
+    while(i<size && bigger_test)
+    {
+        String[] clause=this.cnfs.get(i);
+        int[] line=new int[3];
+        boolean test=false;
+        int j=0;
+        while(j<3 && !test)
+        {
+            if(clause[j].equals("")==false)
+            {
+        int var=Integer.valueOf(clause[j]);
+        int abs=Math.abs(var);
+        if((var>0 && solution[abs]==1) || (var<0 && solution[abs]==0)){test=true;}
+        line[j]=var;
+      count++;
+            }
+           j++;
+         }
+        if(!test){bigger_test=false;}
+        this.cnfs_format.add(line);
+        System.out.println("Line :"+i);
+        i++;
+    }
+    return bigger_test;
     }
     
     public void print()
