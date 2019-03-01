@@ -11,18 +11,21 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.Queue; 
 
 /**
  *
  * @author Rayan
  */
 public class FileCnf {
-    private ArrayList<String[]> cnfs= new ArrayList<String[]>();
-      private ArrayList<int[]> cnfs_format= new ArrayList<int[]>();
+      private Queue<Queue> cnfs_format= new LinkedList<Queue>();
+      private String path;
+      private ArrayList<String[]> read= new ArrayList<String[]>();
     public FileCnf(String path)
     {
         try
     {
+        this.path=path;
          BufferedReader reader;
          reader = new BufferedReader(new FileReader(path));
 	String line = reader.readLine();
@@ -45,7 +48,7 @@ public class FileCnf {
                 }
                 }
 
-                this.cnfs.add(now);
+                this.read.add(now);
             }
             }catch(Exception e){}
 	// read next line
@@ -62,14 +65,14 @@ public class FileCnf {
     }
     public int TestCnfSolution(int[] solution)
     {
-     int size=this.cnfs.size();
+     int size=this.read.size();
     int i=0;
     int count=0;
     boolean bigger_test=true;
     while(i<size && bigger_test)
     {
-        String[] clause=this.cnfs.get(i);
-        int[] line=new int[3];
+        String[] clause=this.read.get(i);
+        Queue<Integer> line = new LinkedList<Integer>();
         boolean test=false;
         int j=0;
         while(j<3 && !test)
@@ -78,14 +81,15 @@ public class FileCnf {
         int var=Integer.valueOf(clause[j]);
         int abs=Math.abs(var);
         if((var>0 && solution[abs]==1) || (var<0 && solution[abs]==0)){test=true;}
-        line[j]=var;
-      count++;
+        line.add(var);
+      
             
            j++;
          }
         if(!test){bigger_test=false;}
         this.cnfs_format.add(line);
         i++;
+        count++;
     }
 
     return i;
@@ -94,16 +98,17 @@ public class FileCnf {
     
     
     
-        public ArrayList<int[]> TestCnfSpecialSolution(int[] solution)
+        public Queue<Queue> FillSolution(int[] solution)
     {
-     int size=this.cnfs.size();
+        System.out.println("Best one : "+this.path);
+     int size=this.read.size();
     int i=0;
     int count=0;
     boolean bigger_test=true;
     while(i<size && bigger_test)
     {
-        String[] clause=this.cnfs.get(i);
-        int[] line=new int[3];
+        String[] clause=this.read.get(i);
+        Queue<Integer> line = new LinkedList<Integer>();
         boolean test=false;
         int j=0;
 
@@ -113,29 +118,48 @@ public class FileCnf {
         int var=Integer.valueOf(clause[j]);
         int abs=Math.abs(var);
         if((var>0 && solution[abs]==1) || (var<0 && solution[abs]==0)){test=true;}
-        line[j]=var;
-    
-        
-      count++;
-         
-         
+        line.add(var);
            j++;
          }
-        /*
-        String a=Integer.toString(line[0]);
-        String b=Integer.toString(line[1]);
-        String c=Integer.toString(line[2]);
-        tabmodel1.addRow(new Object[]{a, b, c});
-*/
+        if(!test){bigger_test=false;}
+        this.cnfs_format.add(line);
+        i++;
+        count++;
+    }
+    System.out.println("Count : "+count+" size : "+this.cnfs_format.size());
+    return this.cnfs_format;
+    }
+        
+  public void GenerateCnfFormated()
+  {
+       int size=this.read.size();
+    int i=0;
+    int count=0;
+    boolean bigger_test=true;
+    while(i<size)
+    {
+        String[] clause=this.read.get(i);
+        Queue<Integer> line = new LinkedList<Integer>();
+        boolean test=false;
+        int j=0;
+        while(j<3)
+        {
+         
+        int var=Integer.valueOf(clause[j]);
+        int abs=Math.abs(var);
+        
+        line.add(var);
+      
+            
+           j++;
+         }
+        count++;
         if(!test){bigger_test=false;}
         this.cnfs_format.add(line);
         i++;
     }
-
-    return this.cnfs_format;
-    }
-        
- 
+  }
     
+  public Queue<Queue> getFormatedCnf(){return this.cnfs_format;}
     
 }

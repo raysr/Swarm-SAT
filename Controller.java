@@ -6,6 +6,8 @@
 package projetessaim;
 import java.util.ArrayList;
 import java.io.File;
+import java.util.Queue;
+
 import javax.swing.DefaultListModel;
 import javax.swing.table.DefaultTableModel;
 /**
@@ -58,11 +60,11 @@ public class Controller {
     }
     
     
-        public ArrayList<int[]> FileSpecialTest(String file)
+        public Queue<Queue> FillTest(String file)
     {
    
     fc = new FileCnf(file);
-    return fc.TestCnfSpecialSolution(sa.getSolution());
+    return fc.FillSolution(sa.getSolution());
     }
         
         
