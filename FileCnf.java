@@ -18,8 +18,9 @@ import java.util.Queue;
  * @author Rayan
  */
 public class FileCnf {
-      private Queue<Queue> cnfs_format= new LinkedList<Queue>();
+      private int[][] cnfs_format;
       private String path;
+      private int nbrClauses=0;
       private ArrayList<String[]> read= new ArrayList<String[]>();
     public FileCnf(String path)
     {
@@ -51,115 +52,65 @@ public class FileCnf {
                 this.read.add(now);
             }
             }catch(Exception e){}
-	// read next line
 	line = reader.readLine();
 	i++;
         }
-
 	reader.close();
          }
           catch (IOException e)  
     {
         System.out.println("File Not Found.");
     }
+        this.GenerateCnf();
     }
-    public int TestCnfSolution(int[] solution)
+    public int ValidateSolution(int[] solution)
     {
-     int size=this.read.size();
+    int size=this.cnfs_format.length;
     int i=0;
-    int count=0;
     boolean bigger_test=true;
     while(i<size && bigger_test)
     {
-        String[] clause=this.read.get(i);
-        Queue<Integer> line = new LinkedList<Integer>();
         boolean test=false;
         int j=0;
-        while(j<3 && !test)
+        int size2 = this.cnfs_format[i].length;
+        while(j<size2 && !test)
         {
-         
-        int var=Integer.valueOf(clause[j]);
-        int abs=Math.abs(var);
-        if((var>0 && solution[abs]==1) || (var<0 && solution[abs]==0)){test=true;}
-        line.add(var);
-      
-            
-           j++;
+        int abs=Math.abs(this.cnfs_format[i][j]);
+        if((this.cnfs_format[i][j]>0 && solution[abs]==1) || (this.cnfs_format[i][j]<0 && solution[abs]==-1)){test=true;}
+        j++;
          }
-        if(!test){bigger_test=false;}
-        this.cnfs_format.add(line);
+        if(!test){bigger_test=false;return i;}
         i++;
-        count++;
     }
-
     return i;
     }
     
     
     
-    
-        public Queue<Queue> FillSolution(int[] solution)
-    {
-        System.out.println("Best one : "+this.path);
-     int size=this.read.size();
-    int i=0;
-    int count=0;
-    boolean bigger_test=true;
-    while(i<size && bigger_test)
-    {
-        String[] clause=this.read.get(i);
-        Queue<Integer> line = new LinkedList<Integer>();
-        boolean test=false;
-        int j=0;
-
-        while(j<3 && !test)
-        {
-            
-        int var=Integer.valueOf(clause[j]);
-        int abs=Math.abs(var);
-        if((var>0 && solution[abs]==1) || (var<0 && solution[abs]==0)){test=true;}
-        line.add(var);
-           j++;
-         }
-        if(!test){bigger_test=false;}
-        this.cnfs_format.add(line);
-        i++;
-        count++;
-    }
-    System.out.println("Count : "+count+" size : "+this.cnfs_format.size());
-    return this.cnfs_format;
-    }
-        
-  public void GenerateCnfFormated()
+  public void GenerateCnf()
   {
-       int size=this.read.size();
+    int size=this.read.size();
     int i=0;
-    int count=0;
-    boolean bigger_test=true;
+    String[] clause=this.read.get(i);
+    int size2= clause.length;
+    this.cnfs_format=new int[size][size2];
     while(i<size)
     {
-        String[] clause=this.read.get(i);
-        Queue<Integer> line = new LinkedList<Integer>();
-        boolean test=false;
+        clause=this.read.get(i);
+
+        size2= clause.length;
         int j=0;
-        while(j<3)
+        while(j<size2)
         {
-         
         int var=Integer.valueOf(clause[j]);
-        int abs=Math.abs(var);
-        
-        line.add(var);
-      
-            
-           j++;
-         }
-        count++;
-        if(!test){bigger_test=false;}
-        this.cnfs_format.add(line);
+        this.cnfs_format[i][j]=var;
+        j++;
+        }
         i++;
     }
+    this.nbrClauses=i;
   }
-    
-  public Queue<Queue> getFormatedCnf(){return this.cnfs_format;}
+  public int getNbrClauses(){return this.nbrClauses;}
+  public int[][] getFormatedCnf(){return this.cnfs_format;}
     
 }

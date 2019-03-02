@@ -21,7 +21,7 @@ public class Controller {
     public void Randomize(DefaultListModel mod1)
     {
     sa=new Sat();
-    sa.RandomSolution(mod1);
+    sa.RandomSolution(mod1, 21);
     }
     
     
@@ -39,6 +39,7 @@ public class Controller {
     {
         String f=files.get(i);
         acti=this.FileTest(directory+"/"+f);
+        System.out.println("testi :"+acti);
         if(acti>max)
         {
         max=acti;
@@ -56,15 +57,14 @@ public class Controller {
     public int FileTest(String file)
     {
     fc = new FileCnf(file);
-    return fc.TestCnfSolution(sa.getSolution());
+    return fc.ValidateSolution(sa.getSolution());
     }
     
     
-        public Queue<Queue> FillTest(String file)
+        public int[][] FillTest(String file)
     {
-   
     fc = new FileCnf(file);
-    return fc.FillSolution(sa.getSolution());
+    return fc.getFormatedCnf();
     }
         
         

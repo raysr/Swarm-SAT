@@ -275,22 +275,14 @@ public class Frame1 extends javax.swing.JFrame {
     
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 
-                 String max_file=this.control.FolderTest("/Users/q/Documents/SII/PROJET ESSAIM/uf20-91",jTextField3, jTextField5);
-                    Queue<Queue> ar= this.control.FillTest("/Users/q/Documents/SII/PROJET ESSAIM/uf20-91/"+max_file);
+    String max_file=this.control.FolderTest("/Users/q/Documents/SII/PROJET ESSAIM/uf20-91",jTextField3, jTextField5);
+    int[][] ar= this.control.FillTest("/Users/q/Documents/SII/PROJET ESSAIM/uf20-91/"+max_file);
     this.tabmodel1.setRowCount(0);
-    System.out.println("Effective size : "+ar.size());
-    int tester=ar.size();
-                    for(int i=0;i<tester;i++)
+    int tester=ar.length;
+    for(int i=0;i<tester;i++)
     {
-        Queue<Integer> b=ar.poll();
-        //System.out.println("Adding :"+Arrays.toString(b));
-        int[] br = new int[3];
-        int tester2 = b.size();
-        for(int j=0;j<tester2;j++)
-        {
-        br[j]=b.poll();
-        }
-    this.tabmodel1.addRow(new Object[]{Integer.toString(br[0]), Integer.toString(br[1]), Integer.toString(br[2])});
+        int[] b=ar[i];
+        this.tabmodel1.addRow(new Object[]{Integer.toString(b[0]), Integer.toString(b[1]), Integer.toString(b[2])});
     }
 
     }//GEN-LAST:event_jButton1ActionPerformed

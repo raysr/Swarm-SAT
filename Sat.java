@@ -11,13 +11,13 @@ import java.util.Random;
  * @author Rayan
  */
 public class Sat {
-   private int[] solution = new int[21]; 
-
-   public void RandomSolution(DefaultListModel mod1)
+   private int[] solution; 
+   public void RandomSolution(DefaultListModel mod1, int size)
    {
+    this.solution=new int[size];   
        System.out.println("Generate random");
        int[] poss={0,1};
-   for(int i=1;i<21;i++)
+   for(int i=1;i<size;i++)
    {
    Random generator = new Random();
 int randomIndex = generator.nextInt(poss.length);

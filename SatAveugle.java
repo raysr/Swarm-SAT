@@ -4,37 +4,73 @@
  * and open the template in the editor.
  */
 package projetessaim;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Queue; 
 /**
  *
  * @author Rayan
  */
 public class SatAveugle extends Sat{
     public String path;
-    public ArrayList<int[]> cnf_format;
+    public Queue<Queue> cnf_format;
+    private int[] solution; 
+    private boolean found=false;
+    private FileCnf cnf;
+    private int best=0;
     public SatAveugle(String path)
     {
-        FileCnf f = new FileCnf(path);
-        f.GenerateCnfFormated();
-        this.cnf_format=f.getFormatedCnf();
+        this.cnf = new FileCnf(path);
+    }
+    public void Profondeur(int nbvar){
+    this.found=false;
+    this.solution = new int[nbvar+1];
+    int last=1;
+    this.ProfondeurRec(this.solution, last);
     }
     
-    public void Largeur(){
-    ArrayList<Integer> defined = new ArrayList<Integer>();
-    int[] sol= new int[21];
+    public void ProfondeurRec(int[] sol, int indice)
+    {
+        if(indice==21 || this.found)return;
+        int c=this.cnf.ValidateSolution(sol);
+        if(c>this.best)
+        {
+        this.best=c;
+        System.out.println("Profondeur : "+this.best);
+        }
+        if(this.cnf.ValidateSolution(sol)==this.cnf.getNbrClauses()){this.found=true;this.solution=sol;System.out.println("Found");}
+        int[] neg=sol.clone();
+       int[] pos=sol.clone();
+       pos[indice]=1;
+       this.ProfondeurRec(pos, indice+1);
+       neg[indice]=-1;
+       this.ProfondeurRec(neg, indice+1);
+    }
+ 
+    public void Largeur(int nbvar){
+      
+    this.found=false;
+    this.solution = new int[nbvar+1];
+    int last=1;
+    this.LargeurRec(this.solution, last);
     }
     
-    public int[] LargeurRec(int[] sol, ArrayList<Integer> defined, int indice)
+    public void LargeurRec(int[] sol, int indice)
     {
-    for(int i=0;i<this.cnf_format.get(indice).length;i++)
-    if(!Arrays.asList(defined).contains(this.cnf_format.get(indice)[i]))
-    {
-        ArrayList<Integer> copy=(ArrayList<Integer>)defined.clone();
-        int[] new_sol=(int[])sol.clone();
-        copy.add(this.cnf_format.get(indice)[i]);
-        LargeurRec(new_sol ,copy, indice+1);   
+        if(indice==21 || this.found)return;
+        int c=this.cnf.ValidateSolution(sol);
+        if(c>this.best)
+        {
+        this.best=c;
+        System.out.println("Largeur  : "+this.best);
+        }
+        if(this.cnf.ValidateSolution(sol)==this.cnf.getNbrClauses()){this.found=true;this.solution=sol;System.out.println("Found");}
+        int[] neg=sol.clone();
+       int[] pos=sol.clone();
+       pos[indice]=1;
+       if(this.cnf.ValidateSolution(pos)==this.cnf.getNbrClauses()){this.found=true;this.solution=pos;System.out.println("Found");}
+       neg[indice]=-1;
+       if(this.cnf.ValidateSolution(neg)==this.cnf.getNbrClauses()){this.found=true;this.solution=neg;System.out.println("Found");}
+       this.LargeurRec(pos, indice+1);
+       this.LargeurRec(neg, indice+1);
     }
-    }
-    public void Profondeur(FileCnf f){}
+ 
 }
