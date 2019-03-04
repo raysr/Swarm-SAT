@@ -3,73 +3,76 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package projetessaim;
+package swarmproject;
 import java.util.ArrayList;
 import java.io.File;
-import java.util.Queue;
 
-import javax.swing.DefaultListModel;
-import javax.swing.table.DefaultTableModel;
+
+
 /**
  *
  * @author Rayan
  */
 public class Controller {
-    public FileCnf fc;
-    public int[][] representation;
-    public Sat sa;
-    public void Randomize(DefaultListModel mod1)
+    private Sat sa;
+    private String method;
+    private ArrayList<String> methods= new ArrayList<String>() {{
+    add("Aléatoire");
+     add("Largeur");
+    add("Profondeur");
+   
+}}; 
+    public void ChooseMethod(String method, String heuristic)
     {
-    sa=new Sat();
-    sa.RandomSolution(mod1, 21);
+        switch(method)
+        {
+            case "Aléatoire":
+                this.sa=new Sat();
+                this.method="Aléatoire";
+            case "Largeur":
+                this.sa=new SatAveugle();
+                this.sa.ChooseMethod("Largeur");
+                this.method="Largeur";
+                break;
+            case "Profondeur":
+                this.sa=new SatAveugle();
+                this.sa.ChooseMethod("Profondeur");
+                this.method="Profondeur";
+                break;
+        }
     }
     
+    public String getActivatedMethod(){return this.method;}
+    
+    public ArrayList<String> getMethods(){return this.methods;}
     
     
-    public String FolderTest(String directory, javax.swing.JTextField jtext1, javax.swing.JTextField jtext2)
+    public double FolderTest(String directory)
     {
-        final File folder = new File(directory);
+    final File folder = new File(directory);
     ArrayList<String> files= this.listFilesForFolder(folder);
-    boolean test=false;
     int i=0;
-    int acti=0;
-    int max=0;
-    String max_file="";
-    while(acti!=91 && i<files.size())
+    long sum=0;
+    while(i<files.size())
     {
         String f=files.get(i);
-        acti=this.FileTest(directory+"/"+f);
-        System.out.println("testi :"+acti);
-        if(acti>max)
-        {
-        max=acti;
-        max_file=f;
-        }
-       
+        System.out.println("File ("+i+"/"+files.size()+")");
+        sum+=this.FileTest(directory+"/"+f);     
         i++;
     }
-
-    jtext1.setText(max_file);
-    jtext2.setText(Integer.toString(max));
- 
-    return max_file;
-    }
-    public int FileTest(String file)
-    {
-    fc = new FileCnf(file);
-    return fc.ValidateSolution(sa.getSolution());
+    return sum/i;
     }
     
-    
-        public int[][] FillTest(String file)
+    public long FileTest(String file)
     {
-    fc = new FileCnf(file);
-    return fc.getFormatedCnf();
+    this.sa.ChoosePath(file);
+    this.sa.CreateSolution();
+    return this.sa.getExecutionTime();
     }
         
-        
-    public ArrayList<String> listFilesForFolder(final File folder){       
-       ArrayList<String> files=new ArrayList<String>();
+    public ArrayList<String> listFilesForFolder(final File folder)
+    {       
+    ArrayList<String> files=new ArrayList<String>();
     for (final File fileEntry : folder.listFiles()) {
         if (fileEntry.isDirectory()) {
             listFilesForFolder(fileEntry);

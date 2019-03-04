@@ -3,7 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package projetessaim;
+package swarmproject;
+import java.util.ArrayList;
 
 /**
  *
@@ -11,9 +12,15 @@ package projetessaim;
  */
 public class TesterClass {
      public static void main(String[] args){
-    SatAveugle sa = new SatAveugle("/Users/q/Documents/SII/PROJET ESSAIM/uf20-91/uf20-0457.cnf");
-    
-    sa.Largeur(20);
+    Controller control = new Controller();
+   ArrayList<String> methods = control.getMethods();
+  
+    for(int i=0;i<methods.size();i++)
+    {
+         System.out.println("Method "+methods.get(i));
+        control.ChooseMethod(methods.get(i),"");
+        control.FolderTest("/Users/q/Documents/SII/PROJET ESSAIM/uf20-91");
+    }
 
     }
     

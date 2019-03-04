@@ -3,15 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package projetessaim;
+package swarmproject;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.Queue; 
+import java.util.Set;
+import java.util.HashSet;
 
 /**
  *
@@ -22,6 +22,7 @@ public class FileCnf {
       private String path;
       private int nbrClauses=0;
       private ArrayList<String[]> read= new ArrayList<String[]>();
+      private int nbrvars=0;
     public FileCnf(String path)
     {
         try
@@ -65,7 +66,9 @@ public class FileCnf {
     }
     public int ValidateSolution(int[] solution)
     {
+
     int size=this.cnfs_format.length;
+    
     int i=0;
     boolean bigger_test=true;
     while(i<size && bigger_test)
@@ -82,6 +85,7 @@ public class FileCnf {
         if(!test){bigger_test=false;return i;}
         i++;
     }
+
     return i;
     }
     
@@ -93,6 +97,7 @@ public class FileCnf {
     int i=0;
     String[] clause=this.read.get(i);
     int size2= clause.length;
+    Set<Integer> hash_Set = new HashSet<Integer>(); 
     this.cnfs_format=new int[size][size2];
     while(i<size)
     {
@@ -103,14 +108,17 @@ public class FileCnf {
         while(j<size2)
         {
         int var=Integer.valueOf(clause[j]);
+        hash_Set.add(Math.abs(var));
         this.cnfs_format[i][j]=var;
         j++;
         }
         i++;
     }
     this.nbrClauses=i;
+    this.nbrvars=hash_Set.size()+1;
   }
   public int getNbrClauses(){return this.nbrClauses;}
   public int[][] getFormatedCnf(){return this.cnfs_format;}
+  public int getNbrVars(){return this.nbrvars;}
     
 }
