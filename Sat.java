@@ -33,7 +33,7 @@ public class Sat {
     {
         this.cnf = new FileCnf(path);
     }
-   public void CreateSolution()
+   public long CreateSolution()
    {
        System.out.println("Aléatoire choisi");
        this.startTime();
@@ -52,6 +52,7 @@ public class Sat {
     test=(this.cnf.ValidateSolution(this.solution)==this.cnf.getNbrClauses());
     }
     this.endTime();
+    return this.totalTime;
    }
    
    public void ChooseMethod(String method)

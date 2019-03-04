@@ -21,7 +21,7 @@ public class TesterClass {
         System.out.println("Method "+methods.get(i));
         String method = methods.get(i);
         control.ChooseMethod(methods.get(i),"");
-        double mean = control.FolderTest("/Users/q/Documents/SII/PROJET ESSAIM/uf20-91");
+        double mean = control.FolderTest("/Users/q/Documents/SII/PROJET ESSAIM/uf20-91", 10);
         map.put(map,mean);
     }
     

@@ -23,7 +23,11 @@ public class SatAveugle extends Sat{
    
    
    public void startTime(){this.startTime = System.nanoTime();}
-   public void endTime(){this.endTime = System.nanoTime();this.totalTime=this.endTime-this.startTime;}
+   public void endTime()
+   {
+       this.endTime = System.nanoTime();this.totalTime=this.endTime-this.startTime;
+       System.out.println("Start : "+this.startTime+" | End : "+this.endTime+" | Total :"+this.totalTime);
+   }
     public SatAveugle()
     {
     }
@@ -39,13 +43,14 @@ public class SatAveugle extends Sat{
     if(method.equals("Profondeur")){this.method="Profondeur";System.out.println("Profondeur Choisi");}
     }
     @Override
-    public void CreateSolution()
+    public long CreateSolution()
     {
         
         this.startTime();
      int nbvar = 21;
     if(this.method.equals("Largeur"))Largeur(nbvar);
     if(this.method.equals("Profondeur"))Profondeur(nbvar);
+    return this.totalTime;
     }
        public void ChoosePath(String path)
     {
@@ -76,20 +81,19 @@ public class SatAveugle extends Sat{
     this.solution = new int[nbvar+1];
     int last=1;
     this.LargeurRec(this.solution, last);
+    
     }
     
     public void LargeurRec(int[] sol, int indice)
     {
         if(indice==21 || this.found)return;
-        
-        int damn=this.cnf.ValidateSolution(sol);
-        if(this.cnf.ValidateSolution(sol)==this.cnf.getNbrClauses()){this.found=true;this.solution=sol;System.out.println("Found");this.endTime();}
+        if(this.cnf.ValidateSolution(sol)==this.cnf.getNbrClauses()){this.found=true;this.solution=sol;this.endTime();}
         int[] neg=sol.clone();
        int[] pos=sol.clone();
        pos[indice]=1;
-       if(this.cnf.ValidateSolution(pos)==this.cnf.getNbrClauses()){this.found=true;this.solution=pos;System.out.println("Found");this.endTime();}
+       if(this.cnf.ValidateSolution(pos)==this.cnf.getNbrClauses()){this.found=true;this.solution=pos;this.endTime();}
        neg[indice]=-1;
-       if(this.cnf.ValidateSolution(neg)==this.cnf.getNbrClauses()){this.found=true;this.solution=neg;System.out.println("Found");}
+       if(this.cnf.ValidateSolution(neg)==this.cnf.getNbrClauses()){this.found=true;this.solution=neg;this.endTime();}
        this.LargeurRec(pos, indice+1);
        this.LargeurRec(neg, indice+1);
     }

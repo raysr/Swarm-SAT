@@ -13,12 +13,15 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.scene.Group;
+import java.util.Map;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
-import java.util.ArrayList;
+import java.util.HashMap;
+import javafx.scene.control.TextField;
 /**
  *
  * @author Rayan
@@ -27,40 +30,48 @@ public class SwarmProject extends Application {
 
     public void start(Stage primaryStage) {
         Button btn = new Button();
-        btn.setText("Generate Solution");
+        btn.setText("Tester les Solveurs");
         final CategoryAxis xAxis = new CategoryAxis();
         final NumberAxis yAxis = new NumberAxis();
         final BarChart<String,Number> bc = new BarChart<String,Number>(xAxis,yAxis);
             
-        bc.setTitle("Algorithms Performance");
-        xAxis.setLabel("Time");       
-        yAxis.setLabel("Algorithm");
+        bc.setTitle("Performance des Algorithmes");
+        xAxis.setLabel("Algorithmes");       
+        yAxis.setLabel("Temps(nanosecondes)");
         XYChart.Series series1 = new XYChart.Series();
-        series1.setName("Time");
-        series1.getData().add(new XYChart.Data(austria, 25601.34));
+         series1.setName("Temps d'Execution");
+        TextField nbr = new TextField();
+
         btn.setOnAction(new EventHandler<ActionEvent>(){    
             @Override
             public void handle(ActionEvent event) {
                 Controller control = new Controller();
-                ArrayList<String> methods = control.getMethods();
-                for(int i=0;i<methods.size();i++)
-                {
-                control.ChooseMethod(methods.get(i),"");
-                control.FolderTest("/Users/q/Documents/SII/PROJET ESSAIM/uf20-91");
-                }
+                int num = Integer.valueOf(nbr.getText());
+                System.out.println ("Number of instances : "+num);
+                HashMap<String, Double> map = control.TestAll(num);
                 
+                for (Map.Entry<String, Double> element : map.entrySet()) {
+                    System.out.println("Key : "+element.getKey()+" | Value : "+element.getValue());
+                    series1.getData().add(new XYChart.Data(element.getKey(), element.getValue()));
+                    System.out.println();
+                }
+               
+                
+               
+       
             }
         });
         
-        StackPane root = new StackPane();
-        root.getChildren().add(btn);
-        HBox hbox = new HBox();
-        Group gr = new Group(hbox);
-        hbox.setSpacing(10);
-        root.getChildren().add(gr);
-        Scene scene = new Scene(root, 600, 400);
-       
         
+        VBox vbox = new VBox();
+        HBox hbox = new HBox();
+        
+        hbox.getChildren().addAll(nbr,btn);
+        vbox.setSpacing(10);
+        vbox.getChildren().addAll(bc, hbox);
+        btn.setTranslateX(350);
+        Scene scene = new Scene(vbox, 800, 600);
+       bc.getData().addAll(series1);
         primaryStage.setTitle("Méta-Heuristiques");
         primaryStage.setScene(scene);
         primaryStage.show();

@@ -48,33 +48,37 @@ public class Controller {
     
     public ArrayList<String> getMethods(){return this.methods;}
     
-    public HashMap TestAll(){
-        HashMap map = new HashMap();
+    public HashMap TestAll(int nbr){
+        HashMap<String,Double> map = new HashMap<String,Double>();
    ArrayList<String> methods = this.getMethods();
     for(int i=0;i<methods.size();i++)
     {
         System.out.println("Method "+methods.get(i));
         String method = methods.get(i);
         this.ChooseMethod(methods.get(i),"");
-        double mean = this.FolderTest("/Users/q/Documents/SII/PROJET ESSAIM/uf20-91");
-        map.put(map,mean);
+        double mean = this.FolderTest("/Users/q/Documents/SII/PROJET ESSAIM/uf20-91", nbr);
+        map.put(method, mean);
     }
     
        System.out.println("Final Resultat : "+Arrays.asList(map));
        return map;
     }
     
-    public double FolderTest(String directory)
+    public double FolderTest(String directory, int nbr)
     {
     final File folder = new File(directory);
     ArrayList<String> files= this.listFilesForFolder(folder);
     int i=0;
     long sum=0;
-    while(i<files.size())
+    int size = (files.size()<nbr)?files.size():nbr;
+    while(i<size)
     {
         String f=files.get(i);
         System.out.println("File ("+i+"/"+files.size()+")");
-        sum+=this.FileTest(directory+"/"+f);     
+        long res=this.FileTest(directory+"/"+f);  
+        
+        System.out.println("TIME "+res);
+        sum+=res;
         i++;
     }
     return sum/i;
@@ -83,8 +87,7 @@ public class Controller {
     public long FileTest(String file)
     {
     this.sa.ChoosePath(file);
-    this.sa.CreateSolution();
-    return this.sa.getExecutionTime();
+    return this.sa.CreateSolution();
     }
         
     public ArrayList<String> listFilesForFolder(final File folder)
