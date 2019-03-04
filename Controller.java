@@ -6,6 +6,8 @@
 package swarmproject;
 import java.util.ArrayList;
 import java.io.File;
+import java.util.Arrays;
+import java.util.HashMap;
 
 
 
@@ -46,6 +48,21 @@ public class Controller {
     
     public ArrayList<String> getMethods(){return this.methods;}
     
+    public HashMap TestAll(){
+        HashMap map = new HashMap();
+   ArrayList<String> methods = this.getMethods();
+    for(int i=0;i<methods.size();i++)
+    {
+        System.out.println("Method "+methods.get(i));
+        String method = methods.get(i);
+        this.ChooseMethod(methods.get(i),"");
+        double mean = this.FolderTest("/Users/q/Documents/SII/PROJET ESSAIM/uf20-91");
+        map.put(map,mean);
+    }
+    
+       System.out.println("Final Resultat : "+Arrays.asList(map));
+       return map;
+    }
     
     public double FolderTest(String directory)
     {

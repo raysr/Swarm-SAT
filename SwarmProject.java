@@ -30,6 +30,14 @@ public class SwarmProject extends Application {
         btn.setText("Generate Solution");
         final CategoryAxis xAxis = new CategoryAxis();
         final NumberAxis yAxis = new NumberAxis();
+        final BarChart<String,Number> bc = new BarChart<String,Number>(xAxis,yAxis);
+            
+        bc.setTitle("Algorithms Performance");
+        xAxis.setLabel("Time");       
+        yAxis.setLabel("Algorithm");
+        XYChart.Series series1 = new XYChart.Series();
+        series1.setName("Time");
+        series1.getData().add(new XYChart.Data(austria, 25601.34));
         btn.setOnAction(new EventHandler<ActionEvent>(){    
             @Override
             public void handle(ActionEvent event) {
