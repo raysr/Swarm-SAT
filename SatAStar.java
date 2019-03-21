@@ -5,7 +5,7 @@
  */
 package swarmproject;
 import java.util.ArrayList;
-
+import java.lang.*;
 
 /**
  *
@@ -15,6 +15,7 @@ public class SatAStar extends Sat{
        public String path;
 
     private int[] solution; 
+    private String heuristic;
     private boolean found=false;
     private String method;
     private FileCnf cnf;
@@ -85,8 +86,18 @@ public class SatAStar extends Sat{
      return false;
      }
      
-     public void addToOpen(ArrayList<Node> following, ArrayList<Node> open, ArrayList<Node> closed) // Ajouter à Closed sans redondance
+     public void addToOpen(int[] solution, ArrayList<Integer> resting, ArrayList<Node> open, ArrayList<Node> closed) // Ajouter à Closed sans redondance
      {
+            ArrayList<Node> following = new ArrayList<Node>();         
+         for(int j=0;j<resting.size();j++)
+         {
+            int[] pos = solution.clone();
+            pos[resting.get(j)]=1;
+            following.add(new Node(pos,this.cnf.ValidateSolution(pos)+this.Heuristic(pos, resting.get(j)),0));
+            int[] neg = solution.clone();
+            neg[resting.get(j)]=-1;
+            following.add(new Node(neg,this.cnf.ValidateSolution(neg)+this.Heuristic(neg, resting.get(j)),0));
+         }
      for(int i=0;i<following.size();i++)
      {
         if(!(isInClosed(following.get(i), closed)))
@@ -107,18 +118,64 @@ public class SatAStar extends Sat{
         }
      }
      }
-    public int Heuristic(int[] solution)
+    public int Heuristic(int[] solution, int x)
     {
-    return 0;
+        if(this.heuristic.equals("Bohm"))return Bohm(solution, x);
+        else if(this.heuristic.equals("Moms"))return Moms(solution, x);
+        else if(this.heuristic.equals("Jeroslow"))return Jeroslow(solution, x);
+        else return 0;
     }
-       
+    
+    
+    
+    // BOHM HEURISTIC
+    public int Bohm(int[] solution, int x) // Bohm’s Heuristic 1992
+    {
+    int alpha=1, beta=2;
+    int H =alpha*(Math.max(h(x, true, solution),h(x, false, solution))) +beta*Math.min(h(x, true, solution),h(x, false, solution));
+    return H;
+    }    
+
+    public int h(int indice, boolean value, int[] solution) // the number of not yet satisfied clauses with i literals that contain the literal x.
+    {
+        return this.cnf.ValidateSolutionBohm(solution, indice, value);
+    }   
+    
+    // MOMS HEURISTIC
+    public int Moms(int[] solution, int x) //Popular in the mid 90s
+    {
+    int k=1;
+    int S = (f(x, true, solution)+f(x, true, solution))*2*k+(f(x, true, solution)*f(x, false, solution));
+    return S;
+    }    
+
+    public int f(int indice, boolean value, int[] solution) // the number of not yet satisfied clauses with i literals that contain the literal x.
+    {
+        return this.cnf.ValidateSolutionBohm(solution, indice, value);
+    }   
+    
+    
+    // Jeroslow-Wang Heuristic (Better than Bohm and Moms)
+    public int Jeroslow(int[] solution, int x) //Popular in the mid 90s
+    {
+        int S=0;
+        int nbr=this.cnf.nbrClauses(x, true);
+        nbr+=this.cnf.nbrClauses(x, false);
+        for(int i=0;i<nbr;i++)
+        {
+            S+= Math.pow(2,-3);
+        }
+        return S;
+    }    
+    
+    
      public void AStar(int size)
      {
       this.startTime();
      ArrayList<Node> open = new ArrayList<Node>();
      ArrayList<Node> closed = new ArrayList<Node>();
      int[] solution = new int[size];
-     open.add(new Node(solution, 0+Heuristic(solution), 1));
+     open.add(new Node(solution, 0, 1));
      boolean found=false;
      while(!found && open.size()!=0)
      {
@@ -127,7 +184,7 @@ public class SatAStar extends Sat{
         open.remove(j);
         closed.add(n);
         found = (this.cnf.getNbrClauses()==this.cnf.ValidateSolution(n.solution));
-        this.addToOpen(n.getFollowing(), open, closed);
+        this.addToOpen(n.solution ,n.getFollowing(), open, closed);
      }
      this.endTime();
      }

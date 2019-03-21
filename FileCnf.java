@@ -89,8 +89,58 @@ public class FileCnf {
     return i;
     }
     
+    public int nbrClauses(int x, boolean value)
+    {
+         int counter=0;
+    int size=this.cnfs_format.length;
+    
+    int i=0;
+    while(i<size)
+    {
+        boolean test=false;
+        int j=0;
+        int size2 = this.cnfs_format[i].length;
+        boolean present=false;
+        while(j<size2)
+        {
+        int abs=Math.abs(this.cnfs_format[i][j]);
+        if(abs==x && ((this.cnfs_format[i][j]>0 && value==true) || (this.cnfs_format[i][j]<0 && value==false))){present=true;}
+        j++;
+         }
+        if(present){counter++;}
+        i++;
+    }
+    return counter;
+    
+    }
     
     
+     public int ValidateSolutionBohm(int[] solution,int litteral, boolean value)
+    {
+     int counter=0;
+    int size=this.cnfs_format.length;
+    
+    int i=0;
+    boolean bigger_test=true;
+    while(i<size)
+    {
+        boolean test=false;
+        int j=0;
+        int size2 = this.cnfs_format[i].length;
+        boolean present=false;
+        while(j<size2)
+        {
+        int abs=Math.abs(this.cnfs_format[i][j]);
+        if(abs==litteral && ((this.cnfs_format[i][j]>0 && value==true) || (this.cnfs_format[i][j]<0 && value==false))){present=true;}
+        if((this.cnfs_format[i][j]>0 && solution[abs]==1) || (this.cnfs_format[i][j]<0 && solution[abs]==-1)){test=true;}
+        j++;
+         }
+        if(!test && present){counter++;}
+        i++;
+    }
+
+    return counter;
+    }
   public void GenerateCnf()
   {
     int size=this.read.size();

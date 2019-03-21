@@ -7,20 +7,23 @@ package swarmproject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Arrays;
-/**
+/*
+ *
  *
  * @author Rayan
  */
-public class TesterClass {
-     public static void main(String[] args){
-         HashMap map = new HashMap();
+    public class TesterClass 
+    {
+    public static void main(String[] args)
+    {
+    HashMap map = new HashMap();
     Controller control = new Controller();
-   ArrayList<String> methods = control.getMethods();
+    ArrayList<String> methods = control.getMethods();
     for(int i=0;i<methods.size();i++)
     {
         System.out.println("Method "+methods.get(i));
         String method = methods.get(i);
-        control.ChooseMethod(methods.get(i),"");
+        control.ChooseMethod(methods.get(i));
         double mean = control.FolderTest("/Users/q/Documents/SII/PROJET ESSAIM/uf20-91", 10);
         map.put(map,mean);
     }

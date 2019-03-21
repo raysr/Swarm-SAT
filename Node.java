@@ -15,19 +15,17 @@ public class Node {
     public int f,indice;
     public Node(int[] solution, int f, int indice)
     {
-    this.solution=solution.clone();
-    this.f=f;
-    this.indice=indice;
+        this.solution=solution.clone();
+        this.f=f;
+        this.indice=indice;
     }
-    public ArrayList<Node> getFollowing()
+    public ArrayList<Integer> getFollowing() // Return variables that weren't defined yet
     {
-    ArrayList<Node> following = new ArrayList<Node>();
-    int[] pos = this.solution.clone();
-    pos[this.indice+1]=1;
-    following.add(new Node(pos,this.f,this.indice+1));
-    int[] neg = this.solution.clone();
-    neg[this.indice+1]=-1;
-    following.add(new Node(neg,this.f,this.indice+1));
+    ArrayList<Integer> following = new ArrayList<Integer>();
+    for(int i=1;i<21;i++)
+    {
+    if(solution[i]==0)following.add(i);
+    }
     return following;
     }
 }
