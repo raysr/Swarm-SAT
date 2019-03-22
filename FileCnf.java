@@ -89,6 +89,32 @@ public class FileCnf {
     return i;
     }
     
+        public int nbrNonValid(int[] solution)
+    {
+
+    int size=this.cnfs_format.length;
+    int counter=0;
+    int i=0;
+    boolean bigger_test=true;
+    while(i<size && bigger_test)
+    {
+        boolean test=false;
+        int j=0;
+        int size2 = this.cnfs_format[i].length;
+        while(j<size2 && !test)
+        {
+        int abs=Math.abs(this.cnfs_format[i][j]);
+        if((this.cnfs_format[i][j]>0 && solution[abs]==1) || (this.cnfs_format[i][j]<0 && solution[abs]==-1)){test=true;}
+        j++;
+         }
+        if(!test){counter++;}
+        i++;
+    }
+
+    return counter;
+    }
+    
+    
     public int nbrClauses(int x, boolean value)
     {
          int counter=0;
@@ -121,7 +147,6 @@ public class FileCnf {
     int size=this.cnfs_format.length;
     
     int i=0;
-    boolean bigger_test=true;
     while(i<size)
     {
         boolean test=false;
@@ -167,6 +192,11 @@ public class FileCnf {
     this.nbrClauses=i;
     this.nbrvars=hash_Set.size()+1;
   }
+  
+  
+  
+  
+     
   public int getNbrClauses(){return this.nbrClauses;}
   public int[][] getFormatedCnf(){return this.cnfs_format;}
   public int getNbrVars(){return this.nbrvars;}

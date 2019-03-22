@@ -22,6 +22,7 @@ public class Controller {
     add("Aléatoire");
      add("Largeur");
     add("Profondeur");
+    add("Simple");
     add("Jeroslow");
     add("Bohm");
     add("Moms");
@@ -48,6 +49,11 @@ public class Controller {
                 this.sa.ChooseMethod("Bohm");
                 this.method="Bohm";
                 break;
+            case "Simple":
+                this.sa=new SatAStar();
+                this.sa.ChooseMethod("Simple");
+                this.method="Simple";
+                break;
             case "Moms":
                 this.sa=new SatAStar();
                 this.sa.ChooseMethod("Moms");
@@ -73,7 +79,7 @@ public class Controller {
         System.out.println("Method "+methods.get(i));
         String method = methods.get(i);
         this.ChooseMethod(methods.get(i));
-        double mean = this.FolderTest("/Users/q/Documents/SII/PROJET ESSAIM/uf20-91", nbr);
+        double mean = this.FolderTest("/Users/q/Documents/Rayan/SII/PROJET ESSAIM/uf20-91", nbr);
         map.put(method, mean);
     }
     

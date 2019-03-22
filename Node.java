@@ -27,6 +27,8 @@ public class Node implements Comparable< Node >{
     {
     System.out.println("Variables : "+Arrays.toString(this.solution)+"  F="+this.f);
     }
+    
+    public void calculateF(){this.f=this.g+this.h;}
     public ArrayList<Integer> getFollowing() // Return variables that weren't defined yet
     {
         ArrayList<Integer> following = new ArrayList<Integer>();
@@ -37,8 +39,29 @@ public class Node implements Comparable< Node >{
         return following;
     }
     
+    public ArrayList<Node> getChilds()
+    {
+        
+        ArrayList<Node> following = new ArrayList<Node>();
+        if(this.indice!=20)
+        {
+        int[] pos = this.solution.clone();
+        pos[this.indice+1]=1;
+        Node n = new Node(pos,0,this.indice+1);
+        n.g = this.g+1;
+        following.add(n);
+        int[] neg = this.solution.clone();
+        neg[this.indice+1]=-1;
+        n = new Node(neg, 0,this.indice+1);
+        n.g = this.g+1;
+        following.add(n);
+        }
+        return following;
+    }
+    
      @Override
-    public int compareTo(Node o){
+    public int compareTo(Node o)
+    {
         return (this.f==o.f)?1:0;
     }
 }

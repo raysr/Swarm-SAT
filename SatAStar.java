@@ -34,6 +34,7 @@ public class SatAStar extends Sat{
     if(method.equals("Bohm")){this.heuristic="Bohm"; System.out.println("Bohm Choisi");}
     if(method.equals("Moms")){this.heuristic="Moms";System.out.println("Moms Choisi");}
     if(method.equals("Jeroslow")){this.heuristic="Jeroslow";System.out.println("Jeroslow Choisi");}
+    if(method.equals("Simple")){this.heuristic="Simple";System.out.println("Simple Choisi");}
     }
     
     @Override
@@ -44,7 +45,7 @@ public class SatAStar extends Sat{
      this.AStar(nbvar);
     return this.totalTime;
     }
-    public int g(int[] sol){return this.cnf.ValidateSolution(sol);}
+    public int g(int[] sol){return this.cnf.nbrNonValid(sol);}
     public int f(int[] sol, int var)
      {
         int result =  this.g(sol)+this.h(sol, var);
@@ -60,9 +61,12 @@ public class SatAStar extends Sat{
         {return this.Moms(solution, x);}
         else if(this.heuristic.equals("Jeroslow"))
         {return this.Jeroslow(solution, x);}
+        else if(this.heuristic.equals("Simple"))
+        {return this.cnf.nbrNonValid(solution);}
         else return 0;
     }
     
+    public int h(int[] solution){return this.cnf.nbrNonValid(solution);}
     
     
     // BOHM HEURISTIC
@@ -121,13 +125,10 @@ public class SatAStar extends Sat{
      {
         Node n = open.remove();
         closed.add(n);
-      //  open.Print();
-        System.out.println(" Open Size = "+open.size()+" Close Size = "+closed.size());
+//        System.out.println(" Best :  "+n.f);
         int validation = this.cnf.ValidateSolution(n.solution);
         found = (this.cnf.getNbrClauses()==validation);
-        open.Deploy(n.solution ,n.getFollowing(), closed, 
-                new Command(){ public int execute(int[] sol, int var){ return f(sol, var); }} 
-                );
+        open.DeployChilds(n.getChilds(), closed, new Command(){ public int execute(int[] sol){ return h(sol); }});
      }
      System.out.println("\n\n \t FOUND \n\n \t");
      this.endTime();

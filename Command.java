@@ -10,5 +10,6 @@ package swarmproject;
  * @author Rayan
  */
 public interface Command {
-    int execute(int[] sol, int var);
+    int execute(int[] sol);
+    
 }
