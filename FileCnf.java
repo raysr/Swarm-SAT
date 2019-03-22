@@ -19,7 +19,7 @@ import java.util.HashSet;
  */
 public class FileCnf {
       private int[][] cnfs_format;
-      private String path;
+      public String path;
       private int nbrClauses=0;
       private ArrayList<String[]> read= new ArrayList<String[]>();
       private int nbrvars=0;

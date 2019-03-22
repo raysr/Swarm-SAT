@@ -22,10 +22,9 @@ public class Controller {
     add("Aléatoire");
      add("Largeur");
     add("Profondeur");
+    add("Jeroslow");
     add("Bohm");
     add("Moms");
-    add("Jeroslow");
-   
 }}; 
     public void ChooseMethod(String method)
     {

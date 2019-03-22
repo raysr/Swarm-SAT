@@ -25,7 +25,7 @@ import java.util.Arrays;
         String method = methods.get(i);
         control.ChooseMethod(methods.get(i));
         double mean = control.FolderTest("/Users/q/Documents/SII/PROJET ESSAIM/uf20-91", 10);
-        map.put(map,mean);
+        //map.put(map,mean);
     }
     
        System.out.println("Final Resultat : "+Arrays.asList(map));

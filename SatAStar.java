@@ -5,65 +5,37 @@
  */
 package swarmproject;
 import java.util.ArrayList;
-import java.lang.*;
+
 
 /**
  *
  * @author Rayan
  */
 public class SatAStar extends Sat{
-       public String path;
-
-    private int[] solution; 
+    public String path;
     private String heuristic;
-    private boolean found=false;
-    private String method;
     private FileCnf cnf;
-    private int best=0;
-    
     private long startTime,endTime,totalTime;
    
-   
-   
-   public void startTime(){this.startTime = System.nanoTime();}
-   public void endTime()
-   {
-       this.endTime = System.nanoTime();this.totalTime=this.endTime-this.startTime;
-       System.out.println("Start : "+this.startTime+" | End : "+this.endTime+" | Total :"+this.totalTime);
-   }
-    public SatAStar()
-    {
-    }
-
-    public int getLowest(ArrayList<Node> nodes) // Retourne l'indice dans la liste du plus bas F cost
-    {
-        int min=9999999;
-        int indice=9999999;
-        for(int i=0;i<nodes.size();i++)
-        {
-            if(nodes.get(i).f<min)
-            {
-                min=nodes.get(i).f;
-                indice=i;
-            }
-        }
-        return indice;
-    }
-    
-    
-    
     public SatAStar(String path)
     {
         this.cnf = new FileCnf(path);
     }
-    
-    
+    public SatAStar(){}
+    public void ChoosePath(String path)
+    {
+        this.cnf = new FileCnf(path);
+    }
+
+        
     @Override
     public void ChooseMethod(String method)
     {
-    if(method.equals("Largeur")){this.method="Largeur"; System.out.println("Largeur Choisi");}
-    if(method.equals("Profondeur")){this.method="Profondeur";System.out.println("Profondeur Choisi");}
+    if(method.equals("Bohm")){this.heuristic="Bohm"; System.out.println("Bohm Choisi");}
+    if(method.equals("Moms")){this.heuristic="Moms";System.out.println("Moms Choisi");}
+    if(method.equals("Jeroslow")){this.heuristic="Jeroslow";System.out.println("Jeroslow Choisi");}
     }
+    
     @Override
     public long CreateSolution()
     {   
@@ -72,57 +44,22 @@ public class SatAStar extends Sat{
      this.AStar(nbvar);
     return this.totalTime;
     }
-       public void ChoosePath(String path)
+    public int g(int[] sol){return this.cnf.ValidateSolution(sol);}
+    public int f(int[] sol, int var)
+     {
+        int result =  this.g(sol)+this.h(sol, var);
+        System.out.println("F = "+result);
+        return result;
+     }
+ 
+    public int h(int[] solution, int x)
     {
-        this.cnf = new FileCnf(path);
-    }
-       
-     public boolean isInClosed(Node nod, ArrayList<Node> closed)
-     {
-     for(int i=0;i<closed.size();i++)
-     {
-         if(closed.get(i).solution==nod.solution) return true;
-     }
-     return false;
-     }
-     
-     public void addToOpen(int[] solution, ArrayList<Integer> resting, ArrayList<Node> open, ArrayList<Node> closed) // Ajouter à Closed sans redondance
-     {
-            ArrayList<Node> following = new ArrayList<Node>();         
-         for(int j=0;j<resting.size();j++)
-         {
-            int[] pos = solution.clone();
-            pos[resting.get(j)]=1;
-            following.add(new Node(pos,this.cnf.ValidateSolution(pos)+this.Heuristic(pos, resting.get(j)),0));
-            int[] neg = solution.clone();
-            neg[resting.get(j)]=-1;
-            following.add(new Node(neg,this.cnf.ValidateSolution(neg)+this.Heuristic(neg, resting.get(j)),0));
-         }
-     for(int i=0;i<following.size();i++)
-     {
-        if(!(isInClosed(following.get(i), closed)))
-        {
-            boolean test=false;
-            for(int j=0;j<open.size();j++)
-            {
-                if(open.get(j).solution==following.get(i).solution)
-                {
-                    open.get(j).f= (open.get(j).f<following.get(i).f)?following.get(i).f:open.get(j).f;
-                    test=true;
-                }
-            }
-            if(!test)
-            {
-                open.add(following.get(i));
-            }
-        }
-     }
-     }
-    public int Heuristic(int[] solution, int x)
-    {
-        if(this.heuristic.equals("Bohm"))return Bohm(solution, x);
-        else if(this.heuristic.equals("Moms"))return Moms(solution, x);
-        else if(this.heuristic.equals("Jeroslow"))return Jeroslow(solution, x);
+        if(this.heuristic.equals("Bohm"))
+        {return this.Bohm(solution, x);}
+        else if(this.heuristic.equals("Moms"))
+        {return this.Moms(solution, x);}
+        else if(this.heuristic.equals("Jeroslow"))
+        {return this.Jeroslow(solution, x);}
         else return 0;
     }
     
@@ -130,7 +67,7 @@ public class SatAStar extends Sat{
     
     // BOHM HEURISTIC
     public int Bohm(int[] solution, int x) // Bohm’s Heuristic 1992
-    {
+    { 
     int alpha=1, beta=2;
     int H =alpha*(Math.max(h(x, true, solution),h(x, false, solution))) +beta*Math.min(h(x, true, solution),h(x, false, solution));
     return H;
@@ -145,11 +82,11 @@ public class SatAStar extends Sat{
     public int Moms(int[] solution, int x) //Popular in the mid 90s
     {
     int k=1;
-    int S = (f(x, true, solution)+f(x, true, solution))*2*k+(f(x, true, solution)*f(x, false, solution));
+    int S = (fmoms(x, true, solution)+fmoms(x, true, solution))*2*k+(fmoms(x, true, solution)*fmoms(x, false, solution));
     return S;
     }    
 
-    public int f(int indice, boolean value, int[] solution) // the number of not yet satisfied clauses with i literals that contain the literal x.
+    public int fmoms(int indice, boolean value, int[] solution) // the number of not yet satisfied clauses with i literals that contain the literal x.
     {
         return this.cnf.ValidateSolutionBohm(solution, indice, value);
     }   
@@ -168,24 +105,31 @@ public class SatAStar extends Sat{
         return S;
     }    
     
+   
+    
     
      public void AStar(int size)
      {
-      this.startTime();
-     ArrayList<Node> open = new ArrayList<Node>();
-     ArrayList<Node> closed = new ArrayList<Node>();
+     System.out.println("File : "+this.cnf.path);
+     this.startTime();
+     OpenList open = new OpenList();
+     ClosedList closed = new ClosedList();
      int[] solution = new int[size];
      open.add(new Node(solution, 0, 1));
      boolean found=false;
      while(!found && open.size()!=0)
      {
-        int j = this.getLowest(open);
-        Node n = open.get(j);
-        open.remove(j);
+        Node n = open.remove();
         closed.add(n);
-        found = (this.cnf.getNbrClauses()==this.cnf.ValidateSolution(n.solution));
-        this.addToOpen(n.solution ,n.getFollowing(), open, closed);
+      //  open.Print();
+        System.out.println(" Open Size = "+open.size()+" Close Size = "+closed.size());
+        int validation = this.cnf.ValidateSolution(n.solution);
+        found = (this.cnf.getNbrClauses()==validation);
+        open.Deploy(n.solution ,n.getFollowing(), closed, 
+                new Command(){ public int execute(int[] sol, int var){ return f(sol, var); }} 
+                );
      }
+     System.out.println("\n\n \t FOUND \n\n \t");
      this.endTime();
      }
  
