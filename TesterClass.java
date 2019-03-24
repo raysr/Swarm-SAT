@@ -7,6 +7,7 @@ package swarmproject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Arrays;
+import java.util.Scanner;
 /*
  *
  *
@@ -16,16 +17,22 @@ import java.util.Arrays;
     {
     public static void main(String[] args)
     {
+       
     HashMap map = new HashMap();
     Controller control = new Controller();
     ArrayList<String> methods = control.getMethods();
+    Scanner scan= new Scanner(System.in);
+
+System.out.println(" Input directory of benchmark : ");
+
+String directory=scan.nextLine();
     for(int i=0;i<methods.size();i++)
     {
         System.out.println("Method "+methods.get(i));
         String method = methods.get(i);
         control.ChooseMethod(methods.get(i));
-        double mean = control.FolderTest("/Users/q/Documents/Rayan/SII/PROJET ESSAIM/uf20-91", 10);
-        //map.put(map,mean);
+        double mean = control.FolderTest(directory, 1);
+        // map.put(map,mean);
     }
     
        System.out.println("Final Resultat : "+Arrays.asList(map));

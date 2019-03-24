@@ -22,11 +22,19 @@ public class SatAStar extends Sat{
         this.cnf = new FileCnf(path);
     }
     public SatAStar(){}
+    @Override
     public void ChoosePath(String path)
     {
         this.cnf = new FileCnf(path);
     }
-
+@Override
+       public void startTime(){this.startTime = System.nanoTime();}
+  @Override
+       public void endTime()
+   {
+       this.endTime = System.nanoTime();this.totalTime=this.endTime-this.startTime;
+       System.out.println("Start : "+this.startTime+" | End : "+this.endTime+" | Total :"+this.totalTime);
+   }
         
     @Override
     public void ChooseMethod(String method)
@@ -114,7 +122,6 @@ public class SatAStar extends Sat{
     
      public void AStar(int size)
      {
-     System.out.println("File : "+this.cnf.path);
      this.startTime();
      OpenList open = new OpenList();
      ClosedList closed = new ClosedList();
@@ -125,12 +132,10 @@ public class SatAStar extends Sat{
      {
         Node n = open.remove();
         closed.add(n);
-//        System.out.println(" Best :  "+n.f);
         int validation = this.cnf.ValidateSolution(n.solution);
         found = (this.cnf.getNbrClauses()==validation);
         open.DeployChilds(n.getChilds(), closed, new Command(){ public int execute(int[] sol){ return h(sol); }});
      }
-     System.out.println("\n\n \t FOUND \n\n \t");
      this.endTime();
      }
  

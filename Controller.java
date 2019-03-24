@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.io.File;
 import java.util.Arrays;
 import java.util.HashMap;
-
+import java.util.Scanner;
 
 
 /**
@@ -74,12 +74,18 @@ public class Controller {
     public HashMap TestAll(int nbr){
         HashMap<String,Double> map = new HashMap<String,Double>();
    ArrayList<String> methods = this.getMethods();
+   
+   Scanner scan= new Scanner(System.in);
+
+System.out.println(" Input directory of benchmark : ");
+
+String directory=scan.nextLine();
     for(int i=0;i<methods.size();i++)
     {
         System.out.println("Method "+methods.get(i));
         String method = methods.get(i);
         this.ChooseMethod(methods.get(i));
-        double mean = this.FolderTest("/Users/q/Documents/Rayan/SII/PROJET ESSAIM/uf20-91", nbr);
+        double mean = this.FolderTest(directory, nbr);
         map.put(method, mean);
     }
     
