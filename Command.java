@@ -11,5 +11,4 @@ package swarmproject;
  */
 public interface Command {
     int execute(int[] sol);
-    
 }

@@ -21,8 +21,19 @@ public class Node implements Comparable< Node >{
         this.solution=solution.clone();
         this.f=f;
         this.indice=indice;
-        this.format=Arrays.toString(this.solution)+" F="+Integer.toString(f);
+        //this.format=Arrays.toString(this.solution)+" F="+Integer.toString(f);
     }
+    
+        public Node(int[] solution, int h, int g,int indice)
+    {
+        this.solution=solution.clone();
+        this.g=g;
+        this.h=h;
+        this.f=g+h;
+        this.indice=indice;
+        //this.format=Arrays.toString(this.solution)+" F="+Integer.toString(f);
+    }
+    
     public void print()
     {
     System.out.println("Variables : "+Arrays.toString(this.solution)+"  F="+this.f);
@@ -43,7 +54,7 @@ public class Node implements Comparable< Node >{
     {
         
         ArrayList<Node> following = new ArrayList<Node>();
-        if(this.indice!=20)
+        if(this.indice+1<this.solution.length)
         {
         int[] pos = this.solution.clone();
         pos[this.indice+1]=1;
@@ -58,6 +69,8 @@ public class Node implements Comparable< Node >{
         }
         return following;
     }
+    
+  
     
      @Override
     public int compareTo(Node o)

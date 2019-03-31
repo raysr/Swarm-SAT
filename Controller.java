@@ -19,13 +19,14 @@ public class Controller {
     private Sat sa;
     private String method;
     private ArrayList<String> methods= new ArrayList<String>() {{
-    add("Aléatoire");
+    add("A* Par clauses non-satisfaites");
+        add("Aléatoire");
      add("Largeur");
     add("Profondeur");
-    add("Simple");
-    add("Jeroslow");
-    add("Bohm");
-    add("Moms");
+    
+ //   add("Jeroslow");
+ //   add("Bohm");
+ //   add("Moms");
 }}; 
     public void ChooseMethod(String method)
     {
@@ -49,10 +50,10 @@ public class Controller {
                 this.sa.ChooseMethod("Bohm");
                 this.method="Bohm";
                 break;
-            case "Simple":
+            case "A* Par clauses non-satisfaites":
                 this.sa=new SatAStar();
-                this.sa.ChooseMethod("Simple");
-                this.method="Simple";
+                this.sa.ChooseMethod("A* Par clauses non-satisfaites");
+                this.method="A* Par clauses non-satisfaites";
                 break;
             case "Moms":
                 this.sa=new SatAStar();
@@ -77,9 +78,9 @@ public class Controller {
    
    Scanner scan= new Scanner(System.in);
 
-System.out.println(" Input directory of benchmark : ");
-
-String directory=scan.nextLine();
+//System.out.println(" Input directory of benchmark : ");
+//String directory=scan.nextLine();
+String directory = "/Users/q/Documents/Rayan/SII/PROJET ESSAIM/uf20-91";
     for(int i=0;i<methods.size();i++)
     {
         System.out.println("Method "+methods.get(i));
@@ -89,7 +90,7 @@ String directory=scan.nextLine();
         map.put(method, mean);
     }
     
-       System.out.println("Final Resultat : "+Arrays.asList(map));
+       System.out.println("Resultat Final : "+Arrays.asList(map));
        return map;
     }
     
@@ -103,10 +104,10 @@ String directory=scan.nextLine();
     while(i<size)
     {
         String f=files.get(i);
-        System.out.println("File ("+i+"/"+files.size()+")");
+//        System.out.println("File ("+i+"/"+files.size()+")");
         long res=this.FileTest(directory+"/"+f);  
         
-        System.out.println("TIME "+res);
+ //       System.out.println("TIME "+res);
         sum+=res;
         i++;
     }

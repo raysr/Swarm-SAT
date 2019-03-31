@@ -21,7 +21,7 @@ public class Sat {
    public void endTime(){this.endTime = System.nanoTime();this.totalTime=this.endTime-this.startTime;}
    public Sat()
     {
-        System.out.println("Aléatoire crée");
+        //System.out.println("Aléatoire crée");
     }
     public void ChoosePath(String path)
     {
@@ -35,7 +35,7 @@ public class Sat {
     }
    public long CreateSolution()
    {
-       System.out.println("Aléatoire choisi");
+      // System.out.println("Aléatoire choisi");
        this.startTime();
     int size=this.cnf.getNbrVars();
     boolean test=false;
@@ -50,6 +50,7 @@ public class Sat {
         this.solution[i]=poss[randomIndex];
     }
     test=(this.cnf.ValidateSolution(this.solution)==this.cnf.getNbrClauses());
+    System.out.println("FOUND ! ");
     }
     this.endTime();
     return this.totalTime;

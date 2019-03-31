@@ -23,9 +23,10 @@ import java.util.Scanner;
     ArrayList<String> methods = control.getMethods();
     Scanner scan= new Scanner(System.in);
 
-System.out.println(" Input directory of benchmark : ");
+//System.out.println(" Input directory of benchmark : ");
 
-String directory=scan.nextLine();
+//String directory=scan.nextLine();
+String directory = "/Users/q/Documents/Rayan/SII/PROJET ESSAIM/uf20-91";
     for(int i=0;i<methods.size();i++)
     {
         System.out.println("Method "+methods.get(i));

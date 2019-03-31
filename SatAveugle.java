@@ -5,6 +5,10 @@
  */
 package swarmproject;
 import java.util.Queue; 
+import java.util.Stack;
+import java.util.LinkedList;
+import java.util.ArrayList;
+
 /**
  *
  * @author Rayan
@@ -39,8 +43,8 @@ public class SatAveugle extends Sat{
     @Override
     public void ChooseMethod(String method)
     {
-    if(method.equals("Largeur")){this.method="Largeur"; System.out.println("Largeur Choisi");}
-    if(method.equals("Profondeur")){this.method="Profondeur";System.out.println("Profondeur Choisi");}
+    if(method.equals("Largeur")){this.method="Largeur"; }
+    if(method.equals("Profondeur")){this.method="Profondeur";}
     }
     @Override
     public long CreateSolution()
@@ -57,45 +61,64 @@ public class SatAveugle extends Sat{
         this.cnf = new FileCnf(path);
     }
     
+       
     public void Profondeur(int nbvar){
-    this.found=false;
-    this.solution = new int[nbvar+1];
+    Stack<Node> Ouverte = new Stack<Node>();
+    Queue<Node> Ferme = new LinkedList<Node>();
+    int[] solution = new int[nbvar+1];
     int last=1;
-    this.ProfondeurRec(this.solution, last);
+    int i;
+    Node n1 = new Node(solution, 0 , last);
+    boolean found = false;
+    this.startTime();
+    Ouverte.add(n1);
+    while( !Ouverte.isEmpty() && found == false)
+    {
+    Node n = Ouverte.pop();
+    ArrayList<Node> successeurs = n.getChilds();
+    i=0;
+        while(i<successeurs.size() && !found)
+    {
+        if(this.cnf.ValidateSolution(successeurs.get(i).solution)==this.cnf.getNbrClauses())
+        {
+        found = true;
+        }
+        Ouverte.add(successeurs.get(i));
+        i++;
+    }
+    }
+    this.endTime();
     }
     
-    public void ProfondeurRec(int[] sol, int indice)
-    {
-        if(indice==21 || this.found)return;
-        if(this.cnf.ValidateSolution(sol)==this.cnf.getNbrClauses()){this.found=true;this.solution=sol;System.out.println("Found");this.endTime();}
-        int[] neg=sol.clone();
-       int[] pos=sol.clone();
-       pos[indice]=1;
-       this.ProfondeurRec(pos, indice+1);
-       neg[indice]=-1;
-       this.ProfondeurRec(neg, indice+1);
-    }
- 
+    
     public void Largeur(int nbvar){
-    this.found=false;
-    this.solution = new int[nbvar+1];
+        int max=0;
+    Queue<Node> Ouverte = new LinkedList<Node>();
+    Queue<Node> Ferme = new LinkedList<Node>();
+    int i;
+    int[] solution = new int[nbvar+1];
     int last=1;
-    this.LargeurRec(this.solution, last);
-    
-    }
-    
-    public void LargeurRec(int[] sol, int indice)
+    Node n1 = new Node(solution, 0 , last);
+    this.startTime();
+    Ouverte.add(n1);
+    boolean found = false;
+    while( !Ouverte.isEmpty() && found == false)
     {
-        if(indice==21 || this.found)return;
-        if(this.cnf.ValidateSolution(sol)==this.cnf.getNbrClauses()){this.found=true;this.solution=sol;this.endTime();}
-        int[] neg=sol.clone();
-       int[] pos=sol.clone();
-       pos[indice]=1;
-       if(this.cnf.ValidateSolution(pos)==this.cnf.getNbrClauses()){this.found=true;this.solution=pos;this.endTime();}
-       neg[indice]=-1;
-       if(this.cnf.ValidateSolution(neg)==this.cnf.getNbrClauses()){this.found=true;this.solution=neg;this.endTime();}
-       this.LargeurRec(pos, indice+1);
-       this.LargeurRec(neg, indice+1);
+        
+    Node n = Ouverte.poll();
+    ArrayList<Node> successeurs = n.getChilds();
+    i=0;
+    while(i<successeurs.size())
+    {
+        if(this.cnf.ValidateSolution(successeurs.get(i).solution)==this.cnf.getNbrClauses())
+        {
+        found = true;
+        }
+        Ouverte.add(successeurs.get(i));
+        i++;
     }
- 
+    }
+    this.endTime();
+    }
+       
 }

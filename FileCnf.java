@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.HashSet;
+import java.util.HashMap;
 
 /**
  *
@@ -22,6 +23,7 @@ public class FileCnf {
       public String path;
       private int nbrClauses=0;
       private ArrayList<String[]> read= new ArrayList<String[]>();
+      public int[] negative_frequences, positive_frequences;
       private int nbrvars=0;
     public FileCnf(String path)
     {
@@ -66,12 +68,10 @@ public class FileCnf {
     }
     public int ValidateSolution(int[] solution)
     {
-
     int size=this.cnfs_format.length;
-    
     int i=0;
-    boolean bigger_test=true;
-    while(i<size && bigger_test)
+    int count = 0;
+    while(i<size)
     {
         boolean test=false;
         int j=0;
@@ -82,42 +82,18 @@ public class FileCnf {
         if((this.cnfs_format[i][j]>0 && solution[abs]==1) || (this.cnfs_format[i][j]<0 && solution[abs]==-1)){test=true;}
         j++;
          }
-        if(!test){bigger_test=false;return i;}
+        if(test){count++;}
         i++;
     }
-
-    return i;
+    return count;
     }
     
-        public int nbrNonValid(int[] solution)
-    {
-
-    int size=this.cnfs_format.length;
-    int counter=0;
-    int i=0;
-    boolean bigger_test=true;
-    while(i<size && bigger_test)
-    {
-        boolean test=false;
-        int j=0;
-        int size2 = this.cnfs_format[i].length;
-        while(j<size2 && !test)
-        {
-        int abs=Math.abs(this.cnfs_format[i][j]);
-        if((this.cnfs_format[i][j]>0 && solution[abs]==1) || (this.cnfs_format[i][j]<0 && solution[abs]==-1)){test=true;}
-        j++;
-         }
-        if(!test){counter++;}
-        i++;
-    }
-
-    return counter;
-    }
+      
     
     
     public int nbrClauses(int x, boolean value)
     {
-         int counter=0;
+    int counter=0;
     int size=this.cnfs_format.length;
     
     int i=0;
@@ -169,6 +145,8 @@ public class FileCnf {
   public void GenerateCnf()
   {
     int size=this.read.size();
+    this.positive_frequences = new int[size+1];
+    this.negative_frequences = new int[size+1];
     int i=0;
     String[] clause=this.read.get(i);
     int size2= clause.length;
@@ -177,20 +155,23 @@ public class FileCnf {
     while(i<size)
     {
         clause=this.read.get(i);
-
         size2= clause.length;
         int j=0;
         while(j<size2)
         {
         int var=Integer.valueOf(clause[j]);
+        if(var<0){this.negative_frequences[Math.abs(var)]++;}
+        else{this.positive_frequences[var]++;}
         hash_Set.add(Math.abs(var));
         this.cnfs_format[i][j]=var;
         j++;
         }
         i++;
     }
+    
     this.nbrClauses=i;
     this.nbrvars=hash_Set.size()+1;
+    
   }
   
   

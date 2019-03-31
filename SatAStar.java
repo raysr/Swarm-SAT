@@ -27,7 +27,7 @@ public class SatAStar extends Sat{
     {
         this.cnf = new FileCnf(path);
     }
-@Override
+    @Override
        public void startTime(){this.startTime = System.nanoTime();}
   @Override
        public void endTime()
@@ -42,7 +42,7 @@ public class SatAStar extends Sat{
     if(method.equals("Bohm")){this.heuristic="Bohm"; System.out.println("Bohm Choisi");}
     if(method.equals("Moms")){this.heuristic="Moms";System.out.println("Moms Choisi");}
     if(method.equals("Jeroslow")){this.heuristic="Jeroslow";System.out.println("Jeroslow Choisi");}
-    if(method.equals("Simple")){this.heuristic="Simple";System.out.println("Simple Choisi");}
+    if(method.equals("A* Par clauses non-satisfaites")){this.heuristic="A* Par clauses non-satisfaites";System.out.println("Simple Choisi");}
     }
     
     @Override
@@ -53,7 +53,7 @@ public class SatAStar extends Sat{
      this.AStar(nbvar);
     return this.totalTime;
     }
-    public int g(int[] sol){return this.cnf.nbrNonValid(sol);}
+    public int g(int[] sol){return this.cnf.getNbrClauses()-this.cnf.ValidateSolution(sol);}
     public int f(int[] sol, int var)
      {
         int result =  this.g(sol)+this.h(sol, var);
@@ -69,12 +69,12 @@ public class SatAStar extends Sat{
         {return this.Moms(solution, x);}
         else if(this.heuristic.equals("Jeroslow"))
         {return this.Jeroslow(solution, x);}
-        else if(this.heuristic.equals("Simple"))
-        {return this.cnf.nbrNonValid(solution);}
+        else if(this.heuristic.equals("A* Par clauses non-satisfaites"))
+        {return this.cnf.getNbrClauses()-this.cnf.ValidateSolution(solution);}
         else return 0;
     }
     
-    public int h(int[] solution){return this.cnf.nbrNonValid(solution);}
+    public int h(int[] solution){return this.cnf.getNbrClauses()-this.cnf.ValidateSolution(solution);}
     
     
     // BOHM HEURISTIC
@@ -117,24 +117,36 @@ public class SatAStar extends Sat{
         return S;
     }    
     
-   
-    
-    
      public void AStar(int size)
      {
-     this.startTime();
      OpenList open = new OpenList();
      ClosedList closed = new ClosedList();
+     int result;
+     int nbrClauses = this.cnf.getNbrClauses();
+     int i;
      int[] solution = new int[size];
-     open.add(new Node(solution, 0, 1));
      boolean found=false;
-     while(!found && open.size()!=0)
+     this.startTime();
+     open.add(new Node(solution, 0, 1));
+     while(!found && !open.isEmpty())
      {
         Node n = open.remove();
-        closed.add(n);
-        int validation = this.cnf.ValidateSolution(n.solution);
-        found = (this.cnf.getNbrClauses()==validation);
-        open.DeployChilds(n.getChilds(), closed, new Command(){ public int execute(int[] sol){ return h(sol); }});
+        ArrayList<Node> successeurs = n.getChilds();
+        i=0;
+        while(i<successeurs.size() && !found)
+        {
+            n = successeurs.get(i);
+            result = this.cnf.ValidateSolution(n.solution);
+            if(result==nbrClauses)
+            {
+                found = true;
+                System.out.println("FOUND ! "+result);
+            }
+            n.h = nbrClauses-result;
+            n.f=n.h+n.g;
+            open.add(n);
+            i++;
+        }
      }
      this.endTime();
      }
