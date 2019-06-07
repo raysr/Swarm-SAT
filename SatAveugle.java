@@ -52,7 +52,7 @@ public class SatAveugle extends Sat{
     {
         int timing = parameters.get("timing");
         this.startTime();
-     int nbvar = 21;
+     int nbvar = this.cnf.getNbrVars();
     if(this.method.equals("Largeur"))return this.Largeur(nbvar, timing);
     else{return Profondeur(nbvar, timing);}
    

@@ -73,9 +73,9 @@ public class GeneticSat extends Sat{
     int i=0;
     for(i=0;i<sizeOfPopulation;i++)
     {
-    int[] sol = new int[21];
+    int[] sol = new int[this.cnf.getNbrVars()];
     int rand;
-    for(int j=0;j<21;j++)
+    for(int j=0;j<this.cnf.getNbrVars();j++)
     {
         rand = (int)(Math.random() * ((max - min) + 1)) + min;
         if(rand<0){sol[j]= -1;}
@@ -98,13 +98,13 @@ public class GeneticSat extends Sat{
        {
            int lower=1, upper=20;
        int rand = (int) (Math.random() * (upper - lower)) + lower;
-       int[] solution = new int[21];
+       int[] solution = new int[this.cnf.getNbrVars()];
        for(int i=0;i<rand;i++)
        {
        solution[i]=population.get(0)[i];
        }
        
-       for(int i=rand;i<21;i++)
+       for(int i=rand;i<this.cnf.getNbrVars();i++)
        {
        solution[i]=population.get(1)[i];
        }
@@ -145,7 +145,6 @@ public class GeneticSat extends Sat{
          System.out.println("MaxIter : "+this.MaxIter);
      Statistic stat = new Statistic();
      this.startTime();
-     boolean NotStagn = true;
      boolean Found = false;
      int i=0;
      int lower = 10;

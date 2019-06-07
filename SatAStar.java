@@ -49,7 +49,7 @@ public class SatAStar extends Sat{
     @Override
     public Statistic CreateSolution(HashMap<String, Integer> parameters)
     {   
-     int nbvar = 21;
+     int nbvar = this.cnf.getNbrVars();
      int timing = parameters.get("timing");
     return this.AStar(nbvar, timing);
     }

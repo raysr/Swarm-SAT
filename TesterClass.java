@@ -4,10 +4,7 @@
  * and open the template in the editor.
  */
 package swarmproject;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Arrays;
-import java.util.Scanner;
+
 /*
  *
  *
@@ -17,28 +14,9 @@ import java.util.Scanner;
     {
     public static void main(String[] args)
     {
-       
-    HashMap map = new HashMap();
-    Controller control = new Controller();
-    ArrayList<String> methods = control.getMethods();
-    Scanner scan= new Scanner(System.in);
-
-//System.out.println(" Input directory of benchmark : ");
-
-//String directory=scan.nextLine();
-String directory = "/Users/q/Documents/Rayan/SII/PROJET ESSAIM/uf20-91";
-    for(int i=0;i<methods.size();i++)
-    {
-        System.out.println("Method "+methods.get(i));
-        String method = methods.get(i);
-        control.ChooseMethod(methods.get(i));
-        Statistic stat = control.FolderTest(directory, new HashMap<String, Integer>());
-        // map.put(map,mean);
-    }
-    
-       System.out.println("Final Resultat : "+Arrays.asList(map));
-    
-    
+     int upper=1,lower=0;  
+ double U1 =(Math.random() * (upper - lower)) + lower;   
+    System.out.println("Generated : "+U1);
     }
     
 }

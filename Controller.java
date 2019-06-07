@@ -26,6 +26,7 @@ public class Controller {
     add("Largeur");
     add("Profondeur");
     add("Genetic");
+     add("PSO");
  //   add("Jeroslow");
  //   add("Bohm");
  //   add("Moms");
@@ -72,14 +73,35 @@ public class Controller {
                 this.method="Genetic";
                 System.out.println("You have choose genetic ");
                 break;
+            case "PSO":
+                this.sa=new ParticleSwarmSat();
+                this.method="PSO";
+                System.out.println("You have choose genetic ");
+                break;
         }
     }
     
     public String getActivatedMethod(){return this.method;}
     
+    
+    public boolean VerifyDirectory(String directory)
+    {
+       final File folder = new File(directory);
+    ArrayList<String> files= this.listFilesForFolder(folder);
+    int i=0;
+    while(i<files.size())
+    {
+        String f=files.get(i);
+        if(!files.get(i).endsWith(f)){return false;}
+        i++;
+    }
+    return true;
+    }
+    
+    
     public ArrayList<String> getMethods(){return this.methods;}
     
-    public HashMap TestAll(HashMap<String, Integer> parameters){
+    public HashMap TestAll(HashMap<String, Integer> parameters, String directory){
         HashMap<String, Statistic> map = new HashMap<String,Statistic>();
    ArrayList<String> methods = this.getMethods();
    
@@ -87,7 +109,7 @@ public class Controller {
 
 //System.out.println(" Input directory of benchmark : ");
 //String directory=scan.nextLine();
-String directory = "/Users/q/Documents/Rayan/SII/PROJET ESSAIM/uf20-91";
+
     for(int i=0;i<methods.size();i++)
     {
         System.out.println("Method "+methods.get(i));
