@@ -93,7 +93,7 @@ public class GeneticSat extends Sat{
        this.endTime = System.nanoTime();this.totalTime=this.endTime-this.startTime;
        System.out.println("Start : "+this.startTime+" | End : "+this.endTime+" | Total :"+this.totalTime);
    }
-       public void croisement(ArrayList<int[]> population)
+       public ArrayList<int[]> croisement(ArrayList<int[]> population)
        {
            int lower=1, upper=20;
        int rand = (int) (Math.random() * (upper - lower)) + lower;
@@ -108,15 +108,17 @@ public class GeneticSat extends Sat{
        solution[i]=population.get(1)[i];
        }
        population.add(solution);
+       return population;
        }
        
        
-       public void mutation(ArrayList<int[]> population)
+       public ArrayList<int[]> mutation(ArrayList<int[]> population)
        {
            int lower=1, upper=20;
        int rand = (int) (Math.random() * (upper - lower)) + lower;
        if(population.get(0)[rand]==-1){population.get(0)[rand]=1;}
        else{population.get(0)[rand]=0;}
+       return population;
        }
         
     @Override
@@ -140,29 +142,61 @@ public class GeneticSat extends Sat{
      int i=0;
      int lower = 10;
      int upper = 100;
-     
-     ArrayList<int[]> population = this.generate(2);
+     int meanStagn = 0;
+     ArrayList<int[]> population = this.generate(2); // Generation de 2 individus
      ArrayList<Integer> results = new ArrayList<Integer>();
+
+     int countStagn = 0; // Variable pour compter le nombre d'iteration ou il y'a eu stagnation
      
-     int best= 0;
+     int best= 0; // Pour garder en mémoire le meilleur resultat obtenu
      long check=0;
      while(!Found && ((timing!=0 && check<timing) || timing==0))
      {
-         int rand = (int) (Math.random() * (upper - lower)) + lower;
-        
-         if(rand<this.RateCroisement){this.croisement(population);}
-         rand = (int) (Math.random() * (upper - lower)) + lower;
          
-         if(rand<this.RateMutation){this.mutation(population);}
+         if(countStagn>4) // Il y'a stagnation depuis plusieurs iterations
+         {
+            ArrayList<int[]> individus = this.generate(1);
+            individus.add(population.get(0));
+            individus = this.croisement(individus);
+            individus.add(population.get(1));
+            ArrayList<Integer> resultsNew = new ArrayList<Integer>();
+            resultsNew = this.fitness(individus);
+            population = this.selection(individus, resultsNew, 2);
+         }
+         // Générer un nombre aléatoire pour appliquer ou non un croisement
+         int rand = (int) (Math.random() * (upper - lower)) + lower;
+         if(rand<this.RateCroisement){population = this.croisement(population);}
+         
+         // Générer un nombre aléatoire pour appliquer ou non une mutation
+         rand = (int) (Math.random() * (upper - lower)) + lower;
+         if(rand<this.RateMutation){population = this.mutation(population);}
          results = this.fitness(population);
          for(int d=0;d<results.size();d++)
          {
          if(results.get(d)==this.cnf.getNbrClauses()){Found=true;}
          if(results.get(d)>best){best= results.get(d);}
          }
+         
+         // Effectuer une selection des 2 meilleures individus de la population actuelle
          population = this.selection(population, results, 2);
-         i++;
-         check=  (System.nanoTime() - this.startTime) / 100000000;
+         
+         
+         // Calcul de stagnation
+         int oldStagn = meanStagn; // on sauvegarde l'ancienne moyenne de nombre de clauses satisfaites
+         meanStagn=0;
+         int j;
+         for(j=0;j<results.size();j++)
+         {
+         meanStagn+=results.get(j);     // On calcule la nouvelle moyenne 
+         }
+         meanStagn=meanStagn/j;
+         /*
+           Si la difference des moyennes de clauses satisfaites entre les deux iterations dépasse un
+          certain seuil on incrémente le compteur d'iteration de stagnation, SINON on le remet à 0
+          */
+         if(oldStagn!=0 && Math.abs((double)oldStagn-meanStagn)>4){countStagn+=1;} 
+         else{countStagn=0;}
+         check =  (System.nanoTime() - this.startTime) / 100000000; // Variable pour controler le temps
      }
      
      this.endTime();
