@@ -8,6 +8,7 @@ import java.util.Queue;
 import java.util.Stack;
 import java.util.LinkedList;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  *
@@ -47,9 +48,9 @@ public class SatAveugle extends Sat{
     if(method.equals("Profondeur")){this.method="Profondeur";}
     }
     @Override
-    public Statistic CreateSolution(int timing)
+    public Statistic CreateSolution(HashMap<String, Integer> parameters)
     {
-        
+        int timing = parameters.get("timing");
         this.startTime();
      int nbvar = 21;
     if(this.method.equals("Largeur"))return this.Largeur(nbvar, timing);
@@ -91,7 +92,7 @@ public class SatAveugle extends Sat{
         Ouverte.add(successeurs.get(i));
         i++;
     }
-        check = (System.nanoTime() - this.startTime)/ 100000000;
+        check = (System.nanoTime() - this.startTime)/ 10000;
     }
     this.endTime();
     System.out.println("CHECK : "+check);
@@ -133,7 +134,7 @@ public class SatAveugle extends Sat{
         Ouverte.add(successeurs.get(i));
         i++;
     }
-    check = (System.nanoTime()-this.startTime)/100000000;
+    check = (System.nanoTime()-this.startTime)/10000;
     }
     this.endTime();
     System.out.println("CHECK : "+check);

@@ -21,7 +21,7 @@ public class Controller {
     private String method;
     private ArrayList<String> methods= new ArrayList<String>() {{
     
-    add("A* Par clauses non-satisfaites");
+    add("A*");
     add("Aléatoire");
     add("Largeur");
     add("Profondeur");
@@ -52,7 +52,7 @@ public class Controller {
                 this.sa.ChooseMethod("Bohm");
                 this.method="Bohm";
                 break;
-            case "A* Par clauses non-satisfaites":
+            case "A*":
                 this.sa=new SatAStar();
                 this.sa.ChooseMethod("A* Par clauses non-satisfaites");
                 this.method="A* Par clauses non-satisfaites";
@@ -79,7 +79,7 @@ public class Controller {
     
     public ArrayList<String> getMethods(){return this.methods;}
     
-    public HashMap TestAll(int nbr, int timing){
+    public HashMap TestAll(HashMap<String, Integer> parameters){
         HashMap<String, Statistic> map = new HashMap<String,Statistic>();
    ArrayList<String> methods = this.getMethods();
    
@@ -93,7 +93,7 @@ String directory = "/Users/q/Documents/Rayan/SII/PROJET ESSAIM/uf20-91";
         System.out.println("Method "+methods.get(i));
         String method = methods.get(i);
         this.ChooseMethod(methods.get(i));
-        Statistic mean = this.FolderTest(directory, nbr, timing);
+        Statistic mean = this.FolderTest(directory, parameters);
         map.put(method, mean);
     }
     
@@ -101,18 +101,19 @@ String directory = "/Users/q/Documents/Rayan/SII/PROJET ESSAIM/uf20-91";
        return map;
     }
     
-    public Statistic FolderTest(String directory, int nbr, int timing)
+    public Statistic FolderTest(String directory, HashMap<String, Integer> parameters)
     {
     Statistic stat = new Statistic();
     final File folder = new File(directory);
     ArrayList<String> files= this.listFilesForFolder(folder);
     int i=0;
     long sum=0;
+    int nbr = parameters.get("number_instances");
     int size = (files.size()<nbr)?files.size():nbr;
     while(i<size)
     {
         String f=files.get(i);
-        Statistic res=this.FileTest(directory+"/"+f, timing);  
+        Statistic res=this.FileTest(directory+"/"+f, parameters);  
         stat.setTiming( stat.getTiming() + res.getTiming() ) ;
         stat.setNbrClauses( stat.getNbrClauses() + res.getNbrClauses() ) ;
         i++;
@@ -122,10 +123,10 @@ String directory = "/Users/q/Documents/Rayan/SII/PROJET ESSAIM/uf20-91";
     return stat;
     }
     
-    public Statistic FileTest(String file, int timing)
+    public Statistic FileTest(String file, HashMap<String, Integer> parameters)
     {
     this.sa.ChoosePath(file);
-    return this.sa.CreateSolution(timing);
+    return this.sa.CreateSolution(parameters);
     }
         
     public ArrayList<String> listFilesForFolder(final File folder)

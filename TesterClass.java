@@ -32,7 +32,7 @@ String directory = "/Users/q/Documents/Rayan/SII/PROJET ESSAIM/uf20-91";
         System.out.println("Method "+methods.get(i));
         String method = methods.get(i);
         control.ChooseMethod(methods.get(i));
-        Statistic stat = control.FolderTest(directory, 1, 5);
+        Statistic stat = control.FolderTest(directory, new HashMap<String, Integer>());
         // map.put(map,mean);
     }
     

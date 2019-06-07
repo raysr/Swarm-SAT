@@ -6,6 +6,7 @@
 package swarmproject;
 import java.util.Random;
 import java.lang.*;
+import java.util.HashMap;
 /**
  *
  * @author Rayan
@@ -33,8 +34,9 @@ public class Sat {
     {
         this.cnf = new FileCnf(path);
     }
-   public Statistic CreateSolution(int timing)
+   public Statistic CreateSolution(HashMap<String, Integer> parameters)
    {
+       int timing = parameters.get("timing");
       // System.out.println("Aléatoire choisi");
        Statistic stat = new Statistic();
        long check=0;
@@ -57,7 +59,7 @@ public class Sat {
     if(tryit>best){best=tryit;}
     test=(tryit==this.cnf.getNbrClauses());
     System.out.println("FOUND ! ");
-    check = (System.nanoTime() - this.startTime)/ 1000000000;
+    check = (System.nanoTime() - this.startTime)/ 10000;
     }
     this.endTime();
     stat.setNbrClauses(best);

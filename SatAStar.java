@@ -5,6 +5,7 @@
  */
 package swarmproject;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 /**
@@ -46,9 +47,10 @@ public class SatAStar extends Sat{
     }
     
     @Override
-    public Statistic CreateSolution(int timing)
+    public Statistic CreateSolution(HashMap<String, Integer> parameters)
     {   
      int nbvar = 21;
+     int timing = parameters.get("timing");
     return this.AStar(nbvar, timing);
     }
     public int g(int[] sol){return this.cnf.getNbrClauses()-this.cnf.ValidateSolution(sol);}
@@ -149,7 +151,7 @@ public class SatAStar extends Sat{
             open.add(n);
             i++;
         }
-        check = (System.nanoTime() - this.startTime)/ 100000000;
+        check = (System.nanoTime() - this.startTime)/ 10000;
                 
      }
      this.endTime();
