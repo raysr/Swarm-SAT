@@ -6,22 +6,23 @@
 package swarmproject;
 
 import java.util.ArrayList;
-
+import java.lang.Math;
+import java.util.Arrays;
 /**
  *
  * @author Rayan
  */
-public class ParticleSwarmSat extends Sat{
-            public String path;
+public class GeneticSat extends Sat{
+        public String path;
     private FileCnf cnf;
     private long startTime,endTime,totalTime;
     private long RateMutation=50, RateCroisement=50;
    
-    public ParticleSwarmSat(String path)
+    public GeneticSat(String path)
     {
         this.cnf = new FileCnf(path);
     }
-    public ParticleSwarmSat(){}
+    public GeneticSat(){}
     @Override
     public void ChoosePath(String path)
     {
@@ -126,45 +127,48 @@ public class ParticleSwarmSat extends Sat{
     
    public Statistic CreateSolution(int timing)
    {
-     return this.PSO(timing);
+     return this.Gen(timing);
    }
     
     
-     public Statistic PSO(int timing)
-     {/*
+     public Statistic Gen(int timing)
+     {
      Statistic stat = new Statistic();
      this.startTime();
+     boolean NotStagn = true;
      boolean Found = false;
      int i=0;
+     int lower = 10;
+     int upper = 100;
      
-   //  ArrayList<Particle> population = this.generate(2);
+     ArrayList<int[]> population = this.generate(2);
+     ArrayList<Integer> results = new ArrayList<Integer>();
+     
      int best= 0;
      long check=0;
+     while(!Found && ((timing!=0 && check<timing) || timing==0))
+     {
+         int rand = (int) (Math.random() * (upper - lower)) + lower;
+        
+         if(rand<this.RateCroisement){this.croisement(population);}
+         rand = (int) (Math.random() * (upper - lower)) + lower;
+         
+         if(rand<this.RateMutation){this.mutation(population);}
+         results = this.fitness(population);
+         for(int d=0;d<results.size();d++)
+         {
+         if(results.get(d)==this.cnf.getNbrClauses()){Found=true;}
+         if(results.get(d)>best){best= results.get(d);}
+         }
+         population = this.selection(population, results, 2);
+         i++;
+         check=  (System.nanoTime() - this.startTime) / 100000000;
+     }
      
-/*
- for(i=0;i<population.size()) {
-   if f(pi) < f(g) then
-       update the swarm's best known  position: g ← pi
-   Initialize the particle's velocity: vi ~ U(-|bup-blo|, |bup-blo|)
-           }
-while (!Found) 
-    {
-   for each particle i = 1, ..., S do
-      for each dimension d = 1, ..., n do
-         Pick random numbers: rp, rg ~ U(0,1)
-         Update the particle's velocity: vi,d ← ω vi,d + φp rp (pi,d-xi,d) + φg rg (gd-xi,d)
-      Update the particle's position: xi ← xi + vi
-      if f(xi) < f(pi) then
-         Update the particle's best known position: pi ← xi
-         if f(pi) < f(g) then
-            Update the swarm's best known position: g ← pi
-    }
-
-
      this.endTime();
      System.out.println("CHECK : "+check);
      stat.setNbrClauses(best);
      stat.setTiming(check);
-    return stat;*/return new Statistic();
+    return stat;
      }
 }

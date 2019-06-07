@@ -46,12 +46,10 @@ public class SatAStar extends Sat{
     }
     
     @Override
-    public long CreateSolution()
+    public Statistic CreateSolution(int timing)
     {   
-     this.startTime();
      int nbvar = 21;
-     this.AStar(nbvar);
-    return this.totalTime;
+    return this.AStar(nbvar, timing);
     }
     public int g(int[] sol){return this.cnf.getNbrClauses()-this.cnf.ValidateSolution(sol);}
     public int f(int[] sol, int var)
@@ -117,8 +115,9 @@ public class SatAStar extends Sat{
         return S;
     }    
     
-     public void AStar(int size)
+     public Statistic AStar(int size, int timing)
      {
+      Statistic stat = new Statistic();
      OpenList open = new OpenList();
      ClosedList closed = new ClosedList();
      int result;
@@ -126,9 +125,12 @@ public class SatAStar extends Sat{
      int i;
      int[] solution = new int[size];
      boolean found=false;
+     long check = 0;
+     int best = 0;
      this.startTime();
+     
      open.add(new Node(solution, 0, 1));
-     while(!found && !open.isEmpty())
+     while(!found && !open.isEmpty() && ((timing!=0 && check<timing) || timing==0))
      {
         Node n = open.remove();
         ArrayList<Node> successeurs = n.getChilds();
@@ -140,15 +142,21 @@ public class SatAStar extends Sat{
             if(result==nbrClauses)
             {
                 found = true;
-                System.out.println("FOUND ! "+result);
             }
+            if(result>best){best=result;}
             n.h = nbrClauses-result;
             n.f=n.h+n.g;
             open.add(n);
             i++;
         }
+        check = (System.nanoTime() - this.startTime)/ 100000000;
+                
      }
      this.endTime();
+     System.out.println("CHECK : "+check);
+     stat.setNbrClauses(best);
+     stat.setTiming(check);
+     return stat;
      }
  
 }

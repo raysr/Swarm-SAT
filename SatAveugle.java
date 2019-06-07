@@ -47,14 +47,14 @@ public class SatAveugle extends Sat{
     if(method.equals("Profondeur")){this.method="Profondeur";}
     }
     @Override
-    public long CreateSolution()
+    public Statistic CreateSolution(int timing)
     {
         
         this.startTime();
      int nbvar = 21;
-    if(this.method.equals("Largeur"))Largeur(nbvar);
-    if(this.method.equals("Profondeur"))Profondeur(nbvar);
-    return this.totalTime;
+    if(this.method.equals("Largeur"))return this.Largeur(nbvar, timing);
+    else{return Profondeur(nbvar, timing);}
+   
     }
        public void ChoosePath(String path)
     {
@@ -62,7 +62,10 @@ public class SatAveugle extends Sat{
     }
     
        
-    public void Profondeur(int nbvar){
+    public Statistic Profondeur(int nbvar, int timing){
+        Statistic stat = new Statistic();
+        int best = 0;
+        long check = 0;
     Stack<Node> Ouverte = new Stack<Node>();
     Queue<Node> Ferme = new LinkedList<Node>();
     int[] solution = new int[nbvar+1];
@@ -72,27 +75,38 @@ public class SatAveugle extends Sat{
     boolean found = false;
     this.startTime();
     Ouverte.add(n1);
-    while( !Ouverte.isEmpty() && found == false)
+    while( !Ouverte.isEmpty() && found == false && ((timing!=0 && check<timing) || timing==0))
     {
     Node n = Ouverte.pop();
     ArrayList<Node> successeurs = n.getChilds();
     i=0;
         while(i<successeurs.size() && !found)
     {
-        if(this.cnf.ValidateSolution(successeurs.get(i).solution)==this.cnf.getNbrClauses())
+        int tryit= this.cnf.ValidateSolution(successeurs.get(i).solution);
+        if(tryit>best){best=tryit;}
+        if(tryit==this.cnf.getNbrClauses())
         {
         found = true;
         }
         Ouverte.add(successeurs.get(i));
         i++;
     }
+        check = (System.nanoTime() - this.startTime)/ 100000000;
     }
     this.endTime();
+    System.out.println("CHECK : "+check);
+    stat.setNbrClauses(best);
+     stat.setTiming(check);
+    
+    return stat;
     }
     
     
-    public void Largeur(int nbvar){
+    public Statistic Largeur(int nbvar, int timing){
         int max=0;
+        Statistic stat = new Statistic();
+        int best = 0;
+        long check = 0;
     Queue<Node> Ouverte = new LinkedList<Node>();
     Queue<Node> Ferme = new LinkedList<Node>();
     int i;
@@ -102,7 +116,7 @@ public class SatAveugle extends Sat{
     this.startTime();
     Ouverte.add(n1);
     boolean found = false;
-    while( !Ouverte.isEmpty() && found == false)
+    while( !Ouverte.isEmpty() && found == false && ((timing!=0 && check<timing) || timing==0))
     {
         
     Node n = Ouverte.poll();
@@ -110,15 +124,22 @@ public class SatAveugle extends Sat{
     i=0;
     while(i<successeurs.size())
     {
-        if(this.cnf.ValidateSolution(successeurs.get(i).solution)==this.cnf.getNbrClauses())
+        int tryit = this.cnf.ValidateSolution(successeurs.get(i).solution);
+        if(tryit>best){best=tryit;}
+        if(tryit==this.cnf.getNbrClauses())
         {
         found = true;
         }
         Ouverte.add(successeurs.get(i));
         i++;
     }
+    check = (System.nanoTime()-this.startTime)/100000000;
     }
     this.endTime();
+    System.out.println("CHECK : "+check);
+    stat.setNbrClauses(best);
+     stat.setTiming(check);
+    return stat;
     }
        
 }

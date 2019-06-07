@@ -17,13 +17,15 @@ import java.util.Scanner;
  */
 public class Controller {
     private Sat sa;
+    private int timing = 5;
     private String method;
     private ArrayList<String> methods= new ArrayList<String>() {{
-    add("A* Par clauses non-satisfaites");
-        add("Aléatoire");
-     add("Largeur");
-    add("Profondeur");
     
+    add("A* Par clauses non-satisfaites");
+    add("Aléatoire");
+    add("Largeur");
+    add("Profondeur");
+    add("Genetic");
  //   add("Jeroslow");
  //   add("Bohm");
  //   add("Moms");
@@ -65,6 +67,11 @@ public class Controller {
                 this.sa.ChooseMethod("Jeroslow");
                 this.method="Jeroslow";
                 break;
+            case "Genetic":
+                this.sa=new GeneticSat();
+                this.method="Genetic";
+                System.out.println("You have choose genetic ");
+                break;
         }
     }
     
@@ -72,8 +79,8 @@ public class Controller {
     
     public ArrayList<String> getMethods(){return this.methods;}
     
-    public HashMap TestAll(int nbr){
-        HashMap<String,Double> map = new HashMap<String,Double>();
+    public HashMap TestAll(int nbr, int timing){
+        HashMap<String, Statistic> map = new HashMap<String,Statistic>();
    ArrayList<String> methods = this.getMethods();
    
    Scanner scan= new Scanner(System.in);
@@ -86,7 +93,7 @@ String directory = "/Users/q/Documents/Rayan/SII/PROJET ESSAIM/uf20-91";
         System.out.println("Method "+methods.get(i));
         String method = methods.get(i);
         this.ChooseMethod(methods.get(i));
-        double mean = this.FolderTest(directory, nbr);
+        Statistic mean = this.FolderTest(directory, nbr, timing);
         map.put(method, mean);
     }
     
@@ -94,8 +101,9 @@ String directory = "/Users/q/Documents/Rayan/SII/PROJET ESSAIM/uf20-91";
        return map;
     }
     
-    public double FolderTest(String directory, int nbr)
+    public Statistic FolderTest(String directory, int nbr, int timing)
     {
+    Statistic stat = new Statistic();
     final File folder = new File(directory);
     ArrayList<String> files= this.listFilesForFolder(folder);
     int i=0;
@@ -104,20 +112,20 @@ String directory = "/Users/q/Documents/Rayan/SII/PROJET ESSAIM/uf20-91";
     while(i<size)
     {
         String f=files.get(i);
-//        System.out.println("File ("+i+"/"+files.size()+")");
-        long res=this.FileTest(directory+"/"+f);  
-        
- //       System.out.println("TIME "+res);
-        sum+=res;
+        Statistic res=this.FileTest(directory+"/"+f, timing);  
+        stat.setTiming( stat.getTiming() + res.getTiming() ) ;
+        stat.setNbrClauses( stat.getNbrClauses() + res.getNbrClauses() ) ;
         i++;
     }
-    return sum/i;
+    stat.setTiming( stat.getTiming() /i  ) ;
+    stat.setNbrClauses( stat.getNbrClauses() /i ) ;
+    return stat;
     }
     
-    public long FileTest(String file)
+    public Statistic FileTest(String file, int timing)
     {
     this.sa.ChoosePath(file);
-    return this.sa.CreateSolution();
+    return this.sa.CreateSolution(timing);
     }
         
     public ArrayList<String> listFilesForFolder(final File folder)

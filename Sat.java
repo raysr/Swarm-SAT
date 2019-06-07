@@ -33,13 +33,17 @@ public class Sat {
     {
         this.cnf = new FileCnf(path);
     }
-   public long CreateSolution()
+   public Statistic CreateSolution(int timing)
    {
       // System.out.println("Aléatoire choisi");
+       Statistic stat = new Statistic();
+       long check=0;
+       int best=0;
        this.startTime();
     int size=this.cnf.getNbrVars();
+    int tryit = 0;
     boolean test=false;
-    while(!test)
+    while(!test && ((timing!=0 && check<timing) || timing==0))
     {
     this.solution=new int[size];   
     int[] poss={0,1};
@@ -49,11 +53,16 @@ public class Sat {
         int randomIndex = generator.nextInt(poss.length);
         this.solution[i]=poss[randomIndex];
     }
-    test=(this.cnf.ValidateSolution(this.solution)==this.cnf.getNbrClauses());
+    tryit = this.cnf.ValidateSolution(this.solution);
+    if(tryit>best){best=tryit;}
+    test=(tryit==this.cnf.getNbrClauses());
     System.out.println("FOUND ! ");
+    check = (System.nanoTime() - this.startTime)/ 1000000000;
     }
     this.endTime();
-    return this.totalTime;
+    stat.setNbrClauses(best);
+     stat.setTiming(this.endTime);
+    return stat;
    }
    
    public void ChooseMethod(String method)
