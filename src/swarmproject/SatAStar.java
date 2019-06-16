@@ -155,7 +155,6 @@ public class SatAStar extends Sat{
                 
      }
      this.endTime();
-     System.out.println("CHECK : "+check);
      stat.instance=instance;
      stat.setNbrClauses(best);
      stat.setTiming(check);

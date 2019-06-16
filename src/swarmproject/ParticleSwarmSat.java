@@ -35,7 +35,7 @@ public class ParticleSwarmSat extends Sat{
        public void endTime()
    {
        this.endTime = System.nanoTime();this.totalTime=this.endTime-this.startTime;
-     //  System.out.println("Start : "+this.startTime+" | End : "+this.endTime+" | Total :"+this.totalTime);
+
    }
 
         
@@ -97,7 +97,7 @@ public class ParticleSwarmSat extends Sat{
     
      public Statistic PSO(int timing, int number_particles, int instance)
      {
-        //System.out.println("NOMBRE DE VARIABLES : "+this.cnf.getNbrVars()); 
+ 
          
      Statistic stat = new Statistic();
      this.startTime();
@@ -149,7 +149,7 @@ public class ParticleSwarmSat extends Sat{
      }
 
      this.endTime();
-    // System.out.println("CHECK : "+check);
+
      stat.setNbrClauses(globalBestScore);
      stat.setTiming(check);
      stat.number_particles = number_particles ;

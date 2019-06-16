@@ -93,7 +93,6 @@ public class GeneticSat extends Sat{
        public void endTime()
    {
        this.endTime = System.nanoTime();this.totalTime=this.endTime-this.startTime;
-    /*   System.out.println("Start : "+this.startTime+" | End : "+this.endTime+" | Total :"+this.totalTime);*/
    }
        public ArrayList<int[]> croisement(ArrayList<int[]> population)
        {
@@ -104,7 +103,7 @@ public class GeneticSat extends Sat{
        for(int i=0;i<rand;i++)
        {
            try{solution[i]=population.get(individu)[i];}catch(Exception e){
-           System.out.println("TAILLE POPULATION : "+population.size()+" INDIVIDU :"+individu);}
+           }
        
        }
        
@@ -233,19 +232,19 @@ public class GeneticSat extends Sat{
       this.RateMutation = parameters.get("taux_mutation");
       this.MaxIter = parameters.get("max_iteration");
       this.sizePop = parameters.get("size_population");
-      System.out.println(" PARAMS GENETIC : \nTaux Croisement : "+this.RateCroisement+"\nTaux Mutation : "+this.RateMutation);
+      
      return this.Gen(timing, instance);
    }
    
        public HashMap<String, ArrayList<Statistic>> CreateSolutionParameter(int instance, int time)
    {
-     //  System.out.println("Hi");
+
        HashMap<String, ArrayList<Statistic>> results = new HashMap<String, ArrayList<Statistic>>();
   ArrayList<Statistic> stats = new ArrayList<Statistic>();
   
    for(int i=0;i<500;i++)
    {
-    // System.out.println("MaxIter :"+i);
+
      this.MaxIter = i;
      stats.add(this.Gen(time, instance));
    }
@@ -255,7 +254,7 @@ public class GeneticSat extends Sat{
  
    for(int i=1;i<100;i++)
    {
-      //System.out.println("Mutation :"+i);
+
         this.RateMutation = i;
         stats.add(this.Gen(time, instance));
    }
@@ -264,14 +263,14 @@ public class GeneticSat extends Sat{
    
    for(int i=0;i<100;i++)
    {
-    // System.out.println("Croisement :"+i);
+
     this.RateCroisement = i;
     stats.add(this.Gen(time, instance));
    }
     results.putIfAbsent("Taux Croisement", stats);   
     stats = new ArrayList<Statistic>();
           for(int i=1;i<200;i++){
-              // System.out.println("SizePop :"+i);
+           
    this.sizePop = i;
    stats.add(this.Gen(time, instance));
    }

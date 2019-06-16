@@ -130,14 +130,13 @@ public class Controller {
     }
    
    
-  // System.out.println("C1 keys : "+wello.get("C1").keySet());
+
     return wello;
     }
     
     public HashMap<String, ArrayList<Statistic>> FileTestParam(String file, int instance, int time)
     {
     this.sa.ChoosePath(file);
-    //System.out.println("METHODE : "+this.method+" LETS GO !");
     return this.sa.CreateSolutionParameter(instance, time);
     }
     

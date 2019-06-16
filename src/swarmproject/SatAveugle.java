@@ -95,7 +95,6 @@ public class SatAveugle extends Sat{
         check = (System.nanoTime() - this.startTime)/ 10000;
     }
     this.endTime();
-    System.out.println("CHECK : "+check);
     stat.setNbrClauses(best);
     stat.instance=instance;
      stat.setTiming(check);
