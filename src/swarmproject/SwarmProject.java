@@ -379,8 +379,12 @@ public HashMap<String, HashMap<Long, StatisticParam>> OPTIMISATION;
        tpSecond.setContent(secondBox);
        tpThird.setContent(thirdBox);
        tpFourth.setContent(fourthBox);
-       tpFirst.setMaxHeight(200);
-       thirdBox.setMaxWidth(800);
+       
+       tpFirst.setMinHeight(200);
+       thirdBox.setMinWidth(450);
+       tpFirst.setMinWidth(450);
+       tpSecond.setMinWidth(450);
+       fourthBox.setMinWidth(450);
       // tpFirst.setMinWidth();
        tpFirst.setCollapsible(true);
        tpFirst.setText("DATA SET");
@@ -390,7 +394,7 @@ public HashMap<String, HashMap<Long, StatisticParam>> OPTIMISATION;
        Accordion accordion = new Accordion();
  accordion.getPanes().addAll(tpFirst,tpSecond);
        program.getChildren().addAll(accordion);
-       String url = "assets/Fond/graphpng.png";
+       /*String url = "assets/Fond/graphpng.png";
         Image img = new Image(new File(url).toURI().toString());
 BackgroundImage bgImg = new BackgroundImage(img, 
     BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
@@ -400,6 +404,7 @@ BackgroundImage bgImg = new BackgroundImage(img,
         
        
        program.setBackground(new Background(bgImg));
+       */
        bc.getData().addAll(series1);
        ret.add(program);ret.add(fourthBox);ret.add(thirdBox);
        return ret;
@@ -641,8 +646,11 @@ BackgroundImage bgImg = new BackgroundImage(img,
  accordion.getPanes().addAll(tp1, tp2, tp3);
         program.getChildren().addAll(accordion);
         
-        
-        
+        program.setMinWidth(450);
+        accordion.setMinWidth(450);
+        tp1Box.setMaxWidth(450);
+        tp2Box.setMinWidth(450);
+        tp3Box.setMinWidth(450);
        bc.getData().addAll(series1);
        bcClauses.getData().addAll(series1Clauses);
         ret.add(program);ret.add(tp4Box);
