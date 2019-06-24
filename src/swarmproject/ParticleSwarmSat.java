@@ -17,7 +17,17 @@ public class ParticleSwarmSat extends Sat{
     private FileCnf cnf;
     private long startTime,endTime,totalTime;
     private double C1=1,C2=1,W=1;
-
+    private double sizepop=20;
+  
+       public void setParameters(int[] param)
+   {
+   this.sizepop=param[0];
+   this.C1=param[1];
+   this.C2=param[2];
+   this.W=param[3];
+   }
+    
+    
    public ParticleSwarmSat(String path)
     {
         this.cnf = new FileCnf(path);
@@ -97,7 +107,7 @@ public class ParticleSwarmSat extends Sat{
     
      public Statistic PSO(int timing, int number_particles, int instance)
      {
- 
+         number_particles=(int)this.sizepop;
          
      Statistic stat = new Statistic();
      this.startTime();

@@ -20,6 +20,15 @@ public class GeneticSat extends Sat{
     private long RateMutation=10, RateCroisement=10;
    private int MaxIter = 100;
    private int sizePop = 20;
+   
+   public void setParameters(int[] param)
+   {
+   this.MaxIter=param[0];
+   this.RateMutation=param[1];
+   this.RateCroisement=param[2];
+   this.sizePop=param[3];
+   }
+   
     public GeneticSat(String path)
     {
         this.cnf = new FileCnf(path);
@@ -110,7 +119,8 @@ public class GeneticSat extends Sat{
        individu = (int) (Math.random() * ((population.size()-1) - 0)) + 0;
        for(int i=rand;i<this.cnf.getNbrVars();i++)
        {
-       solution[i]=population.get(individu)[i];
+       try{solution[i]=population.get(individu)[i];}catch(Exception e){
+           }
        }
        population.add(solution);
        return population;

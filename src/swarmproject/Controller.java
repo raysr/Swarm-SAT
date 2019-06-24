@@ -178,47 +178,47 @@ public class Controller {
     public ArrayList<String> getMethods(){return this.methods;}
     
     public HashMap TestAll(HashMap<String, Integer> parameters, String directory){
-        HashMap<String, Statistic> map = new HashMap<String,Statistic>();
+        HashMap<String, ArrayList<Statistic>> map = new HashMap<String, ArrayList<Statistic>>();
+        HashMap<String, StatisticParam> res = new HashMap<String, StatisticParam>();
    ArrayList<String> methods = this.getMethods();
    
-   Scanner scan= new Scanner(System.in);
-
-//System.out.println(" Input directory of benchmark : ");
-//String directory=scan.nextLine();
-
     for(int i=0;i<methods.size();i++)
     {
         System.out.println("Method "+methods.get(i));
         String method = methods.get(i);
         this.ChooseMethod(methods.get(i));
-        Statistic mean = this.FolderTest(directory, parameters);
-        map.put(method, mean);
+        StatisticParam mean = this.FolderTest(directory, parameters);
+        res.put(method, mean);
     }
     
        System.out.println("Resultat Final : "+Arrays.asList(map));
-       return map;
+       return res;
     }
     
-    public Statistic FolderTest(String directory, HashMap<String, Integer> parameters)
+    public StatisticParam FolderTest(String directory, HashMap<String, Integer> parameters)
     {
-    Statistic stat = new Statistic();
+    ArrayList<Statistic> stat = new ArrayList<Statistic>();
     final File folder = new File(directory);
     ArrayList<String> files= this.listFilesForFolder(folder);
     int i=0;
     long sum=0;
-    int nbr = parameters.get("number_instances");
+    int nbr;
+    try{
+    nbr = parameters.get("number_instances");
+    }catch(Exception e){ nbr =10;}
     int size = (files.size()<nbr)?files.size():nbr;
     while(i<size)
     {
         String f=files.get(i);
         Statistic res=this.FileTest(directory+"/"+f, parameters, i);  
-        stat.setTiming( stat.getTiming() + res.getTiming() ) ;
-        stat.setNbrClauses( stat.getNbrClauses() + res.getNbrClauses() ) ;
+        stat.add(res);
         i++;
     }
-    stat.setTiming( stat.getTiming() /i  ) ;
-    stat.setNbrClauses( stat.getNbrClauses() /i ) ;
-    return stat;
+    
+    StatisticParam sp = new StatisticParam();
+    sp.instances=stat;
+    sp.calculate();
+    return sp;
     }
     
     public Statistic FileTest(String file, HashMap<String, Integer> parameters, int instance)
