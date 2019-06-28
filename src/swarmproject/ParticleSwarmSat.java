@@ -55,13 +55,14 @@ public class ParticleSwarmSat extends Sat{
         return;
     }
     
-   public Statistic CreateSolution(HashMap<String, Integer> parameters, int instance)
+   public Statistic CreateSolution(HashMap<String, Double> parameters, int instance)
    {
-     int timing = parameters.get("timing");
-     int number_particles = parameters.get("number_particles");
-     this.C1 = parameters.get("C1")/100;
-     this.C2 = parameters.get("C2")/100;
-     this.W = parameters.get("W")/100;
+     int timing = (int)Math.round(parameters.get("timing"));
+     int number_particles = (int)Math.round(parameters.get("number_particles"));
+     this.C1 = parameters.get("C1");
+     this.C2 = parameters.get("C2");
+     this.W = parameters.get("W");
+   //  System.out.println(" PSO | C1 : "+this.C1+" C2 : "+this.C2+" W :"+this.W);
      return this.PSO(timing, number_particles, instance);
    }
    public HashMap<String, ArrayList<Statistic>> CreateSolutionParameter(int instance,int timing)

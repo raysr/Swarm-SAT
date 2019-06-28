@@ -38,14 +38,14 @@ public class Particle {
     
     public void Converge()
     {
-        int upper=this.actualPosition.length-1,lower=0;
-        double rand = 0;
-        double result = 0;
-        for(int i=0;i<this.velocity;i++)
+       //System.out.println("Veloctiy : "+this.velocity+" Size : "+this.actualPosition.length);
+        //System.out.println(" C1 : "+this.C1+" C2 : "+this.C2+" W :"+this.W);
+        for(int i=0;i<(int)Math.round(this.velocity);i++)
         {
-           
-            rand = (Math.random() * (upper - lower)) + lower;
-            this.actualPosition[i]=this.getOneOrZero();
+            Random rand = new Random();
+            int max=this.actualPosition.length-1;int min=0;
+           int randomGen = rand.nextInt((max - min) + 1) + min;
+            this.actualPosition[randomGen]=this.getOneOrZero();
         }
     }
     
@@ -57,10 +57,10 @@ public class Particle {
 }
     public void UpdateVelocity(int[] globalBestSolution)
     {
-            int upper=1,lower=0;
-        
-         double U1 =(Math.random() * (upper - lower)) + lower;
-         double U2 =(Math.random() * (upper - lower)) + lower;
+            int max=1,min=0;
+        Random rand = new Random();
+         double U1 =min + (max - min) * rand.nextDouble();
+         double U2 =min + (max - min) * rand.nextDouble();
         this.velocity = this.W * this.velocity+ this.C1*U1*this.Distance(globalBestSolution, this.actualPosition) + this.C2*U2*this.Distance(this.bestPosition, this.actualPosition); 
         
     }

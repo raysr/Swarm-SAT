@@ -4,11 +4,14 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/Users/q/Documents/Rayan/SII/PROJET%20ESSAIM/SwarmProject/src/swarmproject/GeneticSat.java</file>
+            <file>file:/Users/q/Documents/Rayan/SII/PROJET%20ESSAIM/SwarmProject/src/swarmproject/StatisticParam.java</file>
             <file>file:/Users/q/Documents/Rayan/SII/PROJET%20ESSAIM/SwarmProject/src/swarmproject/SwarmProject.java</file>
+            <file>file:/Users/q/Documents/Rayan/SII/PROJET%20ESSAIM/SwarmProject/src/swarmproject/Particle.java</file>
             <file>file:/Users/q/Documents/Rayan/SII/PROJET%20ESSAIM/SwarmProject/src/swarmproject/Controller.java</file>
             <file>file:/Users/q/Documents/Rayan/SII/PROJET%20ESSAIM/SwarmProject/src/swarmproject/ParticleSwarmSat.java</file>
             <file>file:/Users/q/Documents/Rayan/SII/PROJET%20ESSAIM/SwarmProject/src/swarmproject/ParametersOptimization.java</file>
             <file>file:/Users/q/Documents/Rayan/SII/PROJET%20ESSAIM/SwarmProject/src/swarmproject/Statistic.java</file>
+            <file>file:/Users/q/Documents/Rayan/SII/PROJET%20ESSAIM/SwarmProject/src/swarmproject/OpenList.java</file>
         </group>
     </open-files>
 </project-private>

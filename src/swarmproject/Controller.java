@@ -177,7 +177,7 @@ public class Controller {
     
     public ArrayList<String> getMethods(){return this.methods;}
     
-    public HashMap TestAll(HashMap<String, Integer> parameters, String directory){
+    public HashMap TestAll(HashMap<String, Double> parameters, String directory){
         HashMap<String, ArrayList<Statistic>> map = new HashMap<String, ArrayList<Statistic>>();
         HashMap<String, StatisticParam> res = new HashMap<String, StatisticParam>();
    ArrayList<String> methods = this.getMethods();
@@ -195,18 +195,18 @@ public class Controller {
        return res;
     }
     
-    public StatisticParam FolderTest(String directory, HashMap<String, Integer> parameters)
+    public StatisticParam FolderTest(String directory, HashMap<String, Double> parameters)
     {
     ArrayList<Statistic> stat = new ArrayList<Statistic>();
     final File folder = new File(directory);
     ArrayList<String> files= this.listFilesForFolder(folder);
     int i=0;
     long sum=0;
-    int nbr;
+    double nbr;
     try{
     nbr = parameters.get("number_instances");
     }catch(Exception e){ nbr =10;}
-    int size = (files.size()<nbr)?files.size():nbr;
+    double size = (files.size()<nbr)?files.size():nbr;
     while(i<size)
     {
         String f=files.get(i);
@@ -221,7 +221,7 @@ public class Controller {
     return sp;
     }
     
-    public Statistic FileTest(String file, HashMap<String, Integer> parameters, int instance)
+    public Statistic FileTest(String file, HashMap<String, Double> parameters, int instance)
     {
     this.sa.ChoosePath(file);
     return this.sa.CreateSolution(parameters, instance);

@@ -235,13 +235,13 @@ public class GeneticSat extends Sat{
      
      
      
-       public Statistic CreateSolution(HashMap<String, Integer> parameters, int instance)
+       public Statistic CreateSolution(HashMap<String, Double> parameters, int instance)
    {
-      int timing = parameters.get("timing");
-      this.RateCroisement = parameters.get("taux_croisement");
-      this.RateMutation = parameters.get("taux_mutation");
-      this.MaxIter = parameters.get("max_iteration");
-      this.sizePop = parameters.get("size_population");
+      int timing = (int)Math.round(parameters.get("timing"));
+      this.RateCroisement = (int)Math.round(parameters.get("taux_croisement"));
+      this.RateMutation = (int)Math.round(parameters.get("taux_mutation"));
+      this.MaxIter = (int)Math.round(parameters.get("max_iteration"));
+      this.sizePop = (int)Math.round(parameters.get("size_population"));
       
      return this.Gen(timing, instance);
    }

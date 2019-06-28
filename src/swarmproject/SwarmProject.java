@@ -49,7 +49,7 @@ import javafx.scene.layout.Pane;
  */
 public class SwarmProject extends Application {
 public HashMap<String,  StatisticParam> OPTIMISATION;
-   public HashMap<String, Integer> roders = new HashMap<String, Integer>();
+   public HashMap<String, Double> roders = new HashMap<String, Double>();
 
     public ArrayList<Pane> stats(){
         ArrayList<Pane> ret = new ArrayList<Pane>();
@@ -148,8 +148,8 @@ public HashMap<String,  StatisticParam> OPTIMISATION;
                 Controller control = new Controller();
              
                 
-                HashMap<String, Integer> parameters = new HashMap<String, Integer>();
-                parameters.put("number_instances", 10);
+                HashMap<String, Double> parameters = new HashMap<String, Double>();
+                parameters.put("number_instances", 10.0);
                 parameters.put("timing", roders.get("timing"));
                 parameters.put("size_population", roders.get("sizepop"));
                 parameters.put("taux_croisement", roders.get("taux_croisement"));
@@ -555,7 +555,7 @@ public HashMap<String,  StatisticParam> OPTIMISATION;
             @Override
             public void handle(ActionEvent event) {
             ParametersOptimization po = new ParametersOptimization("Genetic");
-            int[] res = po.Gen();
+            double[] res = po.Gen();
             
   
                 sizePop.setText(String.valueOf(res[3]));
@@ -570,7 +570,7 @@ public HashMap<String,  StatisticParam> OPTIMISATION;
             @Override
             public void handle(ActionEvent event) {
             ParametersOptimization po = new ParametersOptimization("PSO");
-            int[] res = po.Gen();
+            double[] res = po.Gen();
             
   
 
@@ -632,7 +632,7 @@ public HashMap<String,  StatisticParam> OPTIMISATION;
         try{
             BufferedReader br = new BufferedReader(new FileReader("config.txt"));
         for(String line; (line = br.readLine()) != null; ) {
-       roders.put(line.split(":")[0], Integer.valueOf(line.split(":")[1]));
+       roders.put(line.split(":")[0], Double.valueOf(line.split(":")[1]));
         }
                 time.setText(String.valueOf(roders.get("timing")));
                 sizePop.setText(String.valueOf(roders.get("sizepop")));

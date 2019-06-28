@@ -39,9 +39,9 @@ public class Sat {
     {
     return new HashMap<String, ArrayList<Statistic>>();
     }
-   public Statistic CreateSolution(HashMap<String, Integer> parameters, int instance)
+   public Statistic CreateSolution(HashMap<String, Double> parameters, int instance)
    {
-       int timing = parameters.get("timing");
+       double timing = parameters.get("timing");
       // System.out.println("Aléatoire choisi");
        Statistic stat = new Statistic();
        long check=0;

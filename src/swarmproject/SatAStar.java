@@ -47,10 +47,10 @@ public class SatAStar extends Sat{
     }
     
     @Override
-    public Statistic CreateSolution(HashMap<String, Integer> parameters, int instance)
+    public Statistic CreateSolution(HashMap<String, Double> parameters, int instance)
     {   
      int nbvar = this.cnf.getNbrVars();
-     int timing = parameters.get("timing");
+     int timing = (int)Math.round(parameters.get("timing"));
     return this.AStar(nbvar, timing, instance);
     }
     public int g(int[] sol){return this.cnf.getNbrClauses()-this.cnf.ValidateSolution(sol);}

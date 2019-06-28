@@ -48,9 +48,9 @@ public class SatAveugle extends Sat{
     if(method.equals("Profondeur")){this.method="Profondeur";}
     }
     @Override
-    public Statistic CreateSolution(HashMap<String, Integer> parameters, int instance)
+    public Statistic CreateSolution(HashMap<String, Double> parameters, int instance)
     {
-        int timing = parameters.get("timing");
+        int timing = (int)Math.round(parameters.get("timing"));
         this.startTime();
      int nbvar = this.cnf.getNbrVars();
     if(this.method.equals("Largeur"))return this.Largeur(nbvar, timing, instance);
