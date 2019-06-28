@@ -210,7 +210,7 @@ public class ParametersOptimization {
             i++;
         }
     System.out.println("Meilleur résultat : "+this.best_score);
-    return population.get(0);
+    return this.vector;
     }
     
     
